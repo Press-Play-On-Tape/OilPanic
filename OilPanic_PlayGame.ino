@@ -7,14 +7,14 @@
 //
 void playGame_Init() {
 
-    // lifeReset();
+    lifeReset();
 
-    // arduboy.setFrameRate(50);
+    arduboy.setFrameRate(50);
     
-    // gameState = GameState::PlayGame;
-    // frameRate = 50;
-    // frameRate = 50;
-    // counter = 159;
+    gameState = GameState::PlayGame;
+    frameRate = 50;
+    score = 0;
+    numberOfLives = 3;
 
 }
 
@@ -24,16 +24,8 @@ void playGame_Init() {
 //
 void lifeReset() {
 
-    // chair.reset();
-
-    // lionAttacking = Direction::None;
-    // lionAttackingIndex = 0;
-
-    // player1.reset(Constants::Player1_Index, Constants::Player1_YPos); 
-    // player2.reset(Constants::Player2_Index, Constants::Player2_YPos); 
-
-    // lion1.reset(Direction::Left, YPosition::Level_1, 8, Constants::Lion1_Index);
-    // lion2.reset(Direction::Right, YPosition::Level_3, 8, Constants::Lion2_Index);
+    counter = 10;
+    outdoorsYOffset = 0;
 
 }
 
@@ -43,6 +35,7 @@ void lifeReset() {
 //
 void playGame(void) {
 
+    uint8_t justPressedButton = arduboy.justPressedButtons();
 
 
     // Update entity positions ..
@@ -51,14 +44,37 @@ void playGame(void) {
         
         catcher.update();
 
+    }
+
+    if (arduboy.isFrameCount(2)) {
+
         switch (throwOil) {
 
             case ThrowOil::LH_Top:
-                throwOil = ThrowOil::LH_Middle;
+                throwOil++;
+                break;
+
+            case ThrowOil::LH_Miss_Down_Start ... ThrowOil::LH_Miss_Down_End:
+                throwOil++;
+                outdoorsYOffset = outdoorsYOffset + 4;
+                break;
+
+            case ThrowOil::LH_Miss_Bottom_Start ... ThrowOil::LH_Miss_Bottom_End:
+                throwOil++;
+                break;
+
+            case ThrowOil::LH_Miss_Up_Start ... ThrowOil::LH_Miss_Up_NearlyEnd:
+                throwOil++;
+                outdoorsYOffset = outdoorsYOffset - 4;
                 break;
 
             case ThrowOil::LH_Middle:
-                throwOil = ThrowOil::LH_Bottom;
+                if (catcher.isCatching(Direction::Left)) {
+                    throwOil = ThrowOil::LH_Bottom;
+                }
+                else {
+                    throwOil = ThrowOil::LH_Miss_Down_Start;
+                }
                 break;
                 
             case ThrowOil::LH_Bottom:
@@ -66,11 +82,30 @@ void playGame(void) {
                 break;
 
             case ThrowOil::RH_Top:
-                throwOil = ThrowOil::RH_Middle;
+                throwOil++;
+                break;
+
+            case ThrowOil::RH_Miss_Down_Start ... ThrowOil::RH_Miss_Down_End:
+                throwOil++;
+                outdoorsYOffset = outdoorsYOffset + 4;
+                break;
+
+            case ThrowOil::RH_Miss_Bottom_Start ... ThrowOil::RH_Miss_Bottom_End:
+                throwOil++;
+                break;
+
+            case ThrowOil::RH_Miss_Up_Start ... ThrowOil::RH_Miss_Up_NearlyEnd:
+                throwOil++;
+                outdoorsYOffset = outdoorsYOffset - 4;
                 break;
 
             case ThrowOil::RH_Middle:
-                throwOil = ThrowOil::RH_Bottom;
+                if (catcher.isCatching(Direction::Right)) {
+                    throwOil = ThrowOil::RH_Bottom;
+                }
+                else {
+                    throwOil = ThrowOil::RH_Miss_Down_Start;
+                }
                 break;
                 
             case ThrowOil::RH_Bottom:
@@ -80,9 +115,6 @@ void playGame(void) {
         }
 
     }
-
-
-    uint8_t pressedButton = arduboy.justPressedButtons();
 
     switch (gameScene) {
 
@@ -106,10 +138,8 @@ void playGame(void) {
 
             }
 
-
-
-            if (pressedButton & LEFT_BUTTON)               { player.decXPosition(); }
-            if (pressedButton & RIGHT_BUTTON)              { player.incXPosition(); }
+            if (justPressedButton & LEFT_BUTTON)               { player.decXPosition(); }
+            if (justPressedButton & RIGHT_BUTTON)              { player.incXPosition(); }
 
 
             // Change scene?
@@ -141,58 +171,102 @@ void playGame(void) {
 
         case GameScene::Outdoors:
 
-            if (pressedButton & LEFT_BUTTON && player.getXPosition() == XPosition::Position_Outside_RH) { 
-                
-                gameScene = GameScene::Indoors; 
-                player.decXPosition();
-                
-            }
+            if (justPressedButton & LEFT_BUTTON) {
 
-            if (pressedButton & RIGHT_BUTTON && player.getXPosition() == XPosition::Position_Outside_LH) { 
-                
-                gameScene = GameScene::Indoors; 
-                player.incXPosition();
-                
-            }
+                switch (player.getXPosition()) {
+                    
+                    case XPosition::Position_Outside_LH:
 
+                        if (catcher.isCatching(Direction::Left)) {
 
-            // Are we about to throw the oil?
+                            score = score + player.getOilLevel();
 
-            switch (player.getXPosition()) {
+                        }
 
-                case XPosition::Position_Outside_LH:
-
-                    if (catcher.isCatching(Direction::Left) && player.getOilLevel() > 0) {
-Serial.print(score);
-Serial.print(" + ");
-Serial.print(player.getOilLevel());
-
-                        score = score + player.getOilLevel();
-Serial.print(" = ");
-Serial.println(score);
+                        if (throwOil == ThrowOil::None && player.getOilLevel() > 0) throwOil = ThrowOil::LH_Top;
+                        player.setXPosition(XPosition::Position_Throwing_LH);
                         player.setOilLevel(0);
-                        if (throwOil == ThrowOil::None) throwOil = ThrowOil::LH_Top;
+                        break;
 
-                    }
+                    case XPosition::Position_Throwing_RH:
+                        player.setXPosition(XPosition::Position_Outside_RH);
+                        break;
 
-                    break;
+                    case XPosition::Position_Outside_RH:
+                        gameScene = GameScene::Indoors; 
+                        player.decXPosition();
+                        break;
 
-                case XPosition::Position_Outside_RH:
+                    default: break;
 
-                    if (catcher.isCatching(Direction::Right) && player.getOilLevel() > 0) {
-Serial.println(score);
-
-                        score = score + player.getOilLevel();
-                        player.setOilLevel(0);
-                        if (throwOil == ThrowOil::None) throwOil = ThrowOil::RH_Top;
-
-                    }
-
-                    break;
-
-                default: break;
+                }
 
             }
+
+            if (justPressedButton & RIGHT_BUTTON) { 
+
+                switch (player.getXPosition()) {
+                    
+                    case XPosition::Position_Outside_RH:
+
+                        if (catcher.isCatching(Direction::Right)) {
+
+                            score = score + player.getOilLevel();
+
+                        }
+
+                        if (throwOil == ThrowOil::None && player.getOilLevel() > 0) throwOil = ThrowOil::RH_Top;
+                        player.setOilLevel(0);
+                        player.setXPosition(XPosition::Position_Throwing_RH);
+                        break;
+
+                    case XPosition::Position_Throwing_LH:
+                        player.setXPosition(XPosition::Position_Outside_LH);
+                        break;
+
+                    case XPosition::Position_Outside_LH:
+                        gameScene = GameScene::Indoors; 
+                        player.incXPosition();
+                        break;
+
+                    default: break;
+
+                }
+
+            }
+
+
+            // // Are we about to throw the oil?
+
+            // switch (player.getXPosition()) {
+
+            //     case XPosition::Position_Outside_LH:
+
+            //         if (catcher.isCatching(Direction::Left) && player.getOilLevel() > 0) {
+
+            //             score = score + player.getOilLevel();
+            //             player.setOilLevel(0);
+            //             if (throwOil == ThrowOil::None) throwOil = ThrowOil::LH_Top;
+
+            //         }
+
+            //         break;
+
+            //     case XPosition::Position_Outside_RH:
+
+            //         if (catcher.isCatching(Direction::Right) && player.getOilLevel() > 0) {
+
+            //             score = score + player.getOilLevel();
+            //             player.setOilLevel(0);
+            //             if (throwOil == ThrowOil::None) throwOil = ThrowOil::RH_Top;
+
+            //         }
+
+            //         break;
+
+            //     default: break;
+
+            // }
 
 
             break;
@@ -217,15 +291,16 @@ Serial.println(score);
 
         case GameScene::Outdoors:
     
-            for (uint8_t x = 0; x < 12; x++) {
+            for (uint8_t x = 0; x < 13; x++) {
 
                 Sprites::drawOverwrite(0, 0 - outdoorsYOffset + (x * 8), Images::Outdoors, x);
 
             }
 
-            renderPlayer_Outdoors();
-            renderThrowingOil();
-            renderCatcher();
+            renderPlayer_Outdoors(outdoorsYOffset);
+            renderThrowingOil(outdoorsYOffset);
+            renderCatcher(outdoorsYOffset);
+            renderBystanders(outdoorsYOffset);
             break;
 
     }
@@ -245,7 +320,7 @@ void catchOil(XPosition xPosition) {
 
             switch (oil.getYPosition()) {
 
-                case YPosition::Falling_08 ... YPosition::Falling_08:
+                case YPosition::Falling_08 ... YPosition::Falling_11:
                     if (player.incOilLevel()) {
                         oil.setYPosition(YPosition::None);
                     }

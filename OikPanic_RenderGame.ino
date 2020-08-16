@@ -48,38 +48,24 @@ void renderPlayer_Indoors() {
 // ----------------------------------------------------------------------------
 //  Render player outdoors ..
 //
-void renderPlayer_Outdoors() {
+void renderPlayer_Outdoors(uint8_t yOffset) {
 
     switch (player.getXPosition()) {
 
         case XPosition::Position_Outside_LH:
+            Sprites::drawErase(14, 11 - yOffset, Images::Player_Outside, 0);
+            break;
 
-            if (catcher.isCatching(Direction::Left)) {
-
-                Sprites::drawErase(14, 11, Images::Player_Outside, 1);
-
-            }
-            else {
-
-                Sprites::drawErase(14, 11, Images::Player_Outside, 0);
-
-            }
-
+        case XPosition::Position_Throwing_LH:
+            Sprites::drawErase(14, 11 - yOffset, Images::Player_Outside, 1);
             break;
 
         case XPosition::Position_Outside_RH:
+            Sprites::drawErase(91, 11 - yOffset, Images::Player_Outside, 2);
+            break;
 
-            if (catcher.isCatching(Direction::Right)) {
-
-                Sprites::drawErase(91, 11, Images::Player_Outside, 3);
-
-            }
-            else {
-
-                Sprites::drawErase(91, 11, Images::Player_Outside, 2);
-
-            }
-
+        case XPosition::Position_Throwing_RH:
+            Sprites::drawErase(91, 11 - yOffset, Images::Player_Outside, 3);
             break;
 
         default: break;
@@ -92,32 +78,48 @@ void renderPlayer_Outdoors() {
 // ----------------------------------------------------------------------------
 //  Render player outdoors ..
 //
-void renderThrowingOil() {
+void renderThrowingOil(uint8_t yOffset) {
 
     switch (throwOil) {
 
         case ThrowOil::LH_Top:
-            Sprites::drawErase(13, 31, Images::ThrowOil_LH, 0);
+            Sprites::drawErase(13, 31 - yOffset, Images::ThrowOil_LH, 0);
             break;
 
         case ThrowOil::LH_Middle:
-            Sprites::drawErase(12, 35, Images::ThrowOil_LH, 1);
+            Sprites::drawErase(12, 35 - yOffset, Images::ThrowOil_LH, 1);
             break;
 
         case ThrowOil::LH_Bottom:
-            Sprites::drawErase(13, 39, Images::ThrowOil_LH, 2);
+            Sprites::drawErase(13, 39 - yOffset, Images::ThrowOil_LH, 2);
+            break;
+
+        case ThrowOil::LH_Miss_Down_Start ... ThrowOil::LH_Miss_Down_End:
+            Sprites::drawErase(12 -  ((static_cast<uint8_t>(throwOil) - static_cast<uint8_t>(ThrowOil::LH_Miss_Down_Start)) / 4), 39 + ((static_cast<uint8_t>(throwOil) - static_cast<uint8_t>(ThrowOil::LH_Miss_Down_Start)) * 4) - yOffset, Images::ThrowOil_LH, 1);
+            break;
+
+        case ThrowOil::LH_Miss_Bottom_Start ... ThrowOil::LH_Miss_Bottom_End_Of_Splash:
+            Sprites::drawErase(-1, 70 - yOffset, Images::Oil_Splash, static_cast<uint8_t>(throwOil) - static_cast<uint8_t>(ThrowOil::LH_Miss_Bottom_Start));
             break;
 
         case ThrowOil::RH_Top:
-            Sprites::drawErase(112, 31, Images::ThrowOil_RH, 0);
+            Sprites::drawErase(112, 31 - yOffset, Images::ThrowOil_RH, 0);
             break;
 
         case ThrowOil::RH_Middle:
-            Sprites::drawErase(113, 35, Images::ThrowOil_RH, 1);
+            Sprites::drawErase(113, 35 - yOffset, Images::ThrowOil_RH, 1);
             break;
 
         case ThrowOil::RH_Bottom:
-            Sprites::drawErase(112, 39, Images::ThrowOil_RH, 2);
+            Sprites::drawErase(112, 39 - yOffset, Images::ThrowOil_RH, 2);
+            break;
+
+        case ThrowOil::RH_Miss_Down_Start ... ThrowOil::RH_Miss_Down_End:
+            Sprites::drawErase(113 + ((static_cast<uint8_t>(throwOil) - static_cast<uint8_t>(ThrowOil::RH_Miss_Down_Start)) / 4), 39 + ((static_cast<uint8_t>(throwOil) - static_cast<uint8_t>(ThrowOil::RH_Miss_Down_Start)) * 4) - yOffset, Images::ThrowOil_LH, 1);
+            break;
+
+        case ThrowOil::RH_Miss_Bottom_Start ... ThrowOil::RH_Miss_Bottom_End_Of_Splash:
+            Sprites::drawErase(105, 70 - yOffset, Images::Oil_Splash, static_cast<uint8_t>(throwOil) - static_cast<uint8_t>(ThrowOil::RH_Miss_Bottom_Start));
             break;
 
 
@@ -130,9 +132,9 @@ void renderThrowingOil() {
 // ----------------------------------------------------------------------------
 //  Render catcher ..
 //
-void renderCatcher() {
+void renderCatcher(uint8_t yOffset) {
 
-    Sprites::drawErase(catcher.getXDisplay(), 35, Images::Catcher, catcher.getFrame());
+    Sprites::drawErase(catcher.getXDisplay(), 37 - yOffset, Images::Catcher, catcher.getFrame());
 
 }
 
@@ -146,6 +148,32 @@ void renderCatcherMap() {
 
 }
 
+
+// ----------------------------------------------------------------------------
+//  Render bystanders
+//
+void renderBystanders(uint8_t yOffset) {
+
+    switch (throwOil) {
+
+        case ThrowOil::LH_Miss_Bottom_Start ... ThrowOil::LH_Miss_Bottom_End:
+            Sprites::drawErase(-1, 76 - yOffset, Images::Bystanders, 1);
+            Sprites::drawErase(105, 76 - yOffset, Images::Bystanders, 2);
+            break;
+
+        case ThrowOil::RH_Miss_Bottom_Start ... ThrowOil::RH_Miss_Bottom_End:
+            Sprites::drawErase(-1, 76 - yOffset, Images::Bystanders, 0);
+            Sprites::drawErase(105, 76 - yOffset, Images::Bystanders, 3);
+            break;
+
+        default: 
+            Sprites::drawErase(-1, 76 - yOffset, Images::Bystanders, 0);
+            Sprites::drawErase(105, 76 - yOffset, Images::Bystanders, 2);
+            break;
+    
+    }
+
+}
 
 // ----------------------------------------------------------------------------
 //  Render oil droplets ..
@@ -197,3 +225,4 @@ void renderScoreboard(GameScene gameScene) {
     }
 
 }
+

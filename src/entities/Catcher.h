@@ -111,6 +111,8 @@ struct Catcher {
                 
                 case Direction::Right:
                     return x >= 17;
+
+                default: break;
                     
             }
 

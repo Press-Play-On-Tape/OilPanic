@@ -76,8 +76,6 @@ void loop(void) {
         case GameState::Title_Init:
 
             gameState = GameState::Title;
-            numberOfLives = 3;
-            gameOver = false;
 
             #ifdef SOUNDS
                 soundCounter = 0;
@@ -93,10 +91,7 @@ void loop(void) {
 
         case GameState::PlayGame_Init:
 
-            arduboy.setFrameRate(40);
             playGame_Init();
-            gameState = GameState::PlayGame;
-            score = 0;
             [[fallthrough]]
 
         case GameState::PlayGame:
