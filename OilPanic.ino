@@ -13,19 +13,20 @@ Arduboy2Ext arduboy;
 #endif
 
 Player player;
+Catcher catcher;
 Oils oils;
 
 GameState gameState = GameState::Splash_Init;
 GameMode gameMode = GameMode::Easy;
+GameScene gameScene = GameScene::Indoors;
 
 int16_t counter = 10;
 uint8_t frameRate = 50;
 uint16_t score = 0;
 uint8_t numberOfLives = 3;
-// uint8_t ledDelay = 0;
-// uint8_t marqueeCounter = 0;
 
 bool gameOver = false;
+
 
 #ifdef SOUNDS
     uint8_t soundCounter = 0;

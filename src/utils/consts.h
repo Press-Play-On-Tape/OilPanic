@@ -15,6 +15,13 @@ enum class GameState : uint8_t {
 
 };
 
+enum class GameScene : uint8_t {
+
+    Indoors,
+    Outdoors,
+
+};
+
 enum class GameMode : uint8_t {
 
     Easy,
@@ -60,16 +67,20 @@ enum class XPosition : uint8_t {
 
 enum class YPosition : uint8_t {
 
-    StartDrip,
-    HangOn,
-    Falling_02,
-    Falling_03,
+    StartDrip_00,
+    StartDrip_01,
+    StartDrip_02,
+    StartDrip_03,
     Falling_04,
     Falling_05,
     Falling_06,
     Falling_07,
     Falling_08,
     Falling_09,
+    Falling_10,
+    Falling_11,
+    Falling_12,
+    Falling_13,
     Fire,
     None,
 

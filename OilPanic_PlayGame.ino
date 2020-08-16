@@ -43,189 +43,140 @@ void lifeReset() {
 //
 void playGame(void) {
 
+
+
+    // Update catcher ..
+
+    if (arduboy.isFrameCount(8)) {
+        catcher.update();
+    }
+
+
     uint8_t pressedButton = arduboy.justPressedButtons();
 
+    switch (gameScene) {
 
-    if (arduboy.isFrameCount(4)) {
+        case GameScene::Indoors:
 
-        player.update();
+            if (arduboy.isFrameCount(6)) {
+
+                oils.update();
+
+            }
+
+            if (arduboy.isFrameCount(96)) {
+
+                oils.launchOil(random(0,3));
+                
+            }
+
+            if (arduboy.isFrameCount(2)) {
+
+                player.update();
+
+            }
+
+
+
+            if (pressedButton & LEFT_BUTTON)               { player.decXPosition(); }
+            if (pressedButton & RIGHT_BUTTON)              { player.incXPosition(); }
+
+
+            // Change scene?
+
+            if (player.getXPosition() == XPosition::Position_Tipping_LH || player.getXPosition() == XPosition::Position_Tipping_RH) {
+
+                gameScene = GameScene::Outdoors;
+
+            }
+
+
+            // Did we catch some oil ?
+
+            switch (player.getXPosition()) {
+
+                case XPosition::Position_5_Oil:
+                case XPosition::Position_10_Oil:
+                case XPosition::Position_15_Oil:
+                    catchOil(player.getXPosition());
+                    break;
+
+                default: break;
+
+            }
+
+
+            break;
+
+        case GameScene::Outdoors:
+
+            if (pressedButton & LEFT_BUTTON && player.getXPosition() == XPosition::Position_Tipping_RH) { 
+                
+                gameScene = GameScene::Indoors; 
+                player.decXPosition();
+                
+            }
+
+            if (pressedButton & RIGHT_BUTTON && player.getXPosition() == XPosition::Position_Tipping_LH) { 
+                
+                gameScene = GameScene::Indoors; 
+                player.incXPosition();
+                
+            }
+
+            break;
 
     }
 
 
 
-    if (pressedButton & LEFT_BUTTON)               { player.decXPosition(); }
-    if (pressedButton & RIGHT_BUTTON)              { player.incXPosition(); }
+    // --------------------------------------------------------------------------
+    //  Render the screen ..
 
+    switch (gameScene) {
 
-    // // --------------------------------------------------------------------------
-    // //  Update entity positions ..
+        case GameScene::Indoors:
 
-    // if (counter > 0) counter--;
+            Sprites::drawOverwrite(0, 0, Images::Background, 0);
+            renderPlayer();
+            renderOil();
+            renderCatcherMap();
+            break;
+            
 
-    // if (ledDelay > 0) {
-
-    //     ledDelay--;
-
-    //     if (ledDelay == 0) {
-
-    //         arduboy.setRGBled(RED_LED, 0);
-    //         arduboy.setRGBled(GREEN_LED, 0);
-
-    //     }
-
-    // }
-
-
-    // // Handle other movements ..
-
-    // if (arduboy.getFrameCount(4)) chair.update();
-
-    // bool finished = (lion1.getRunning() && (lion1.getYDisplay() < -40 || lion1.getYDisplay() > 100)) ||
-    //                 (lion2.getRunning() && (lion2.getYDisplay() < -40 || lion2.getYDisplay() > 100));
-
-
-    // // Return to main menu ..
-
-    // if (numberOfLives == 0 && finished && lionAttacking != Direction::None) {
-
-    //     if (arduboy.pressed(A_BUTTON))              { gameState = GameState::Title_Init; }
-
-    // }
-
-
-    // // Update player positions ..
-
-    // if (counter == 0 && lionAttacking == Direction::None/* && arduboy.everyXFrames(4)*/) {
-
-    //     if (justPressedButton & A_BUTTON)               { player2.incYPosition(); }
-    //     if (justPressedButton & B_BUTTON)               { player2.decYPosition(); }
-
-    //     if (justPressedButton & UP_BUTTON)              { player1.decYPosition(); }
-    //     if (justPressedButton & DOWN_BUTTON)            { player1.incYPosition(); }
-
-    // }
-
-
-    // // Handle lion movements ..
-
-    // if (!gameOver) {
-
-    //     lion1.updateRunning();
-    //     lion2.updateRunning();
-
-    // }
-
-    // if (counter == 0) {
-
-    //     if ((lionAttacking == Direction::None || lionAttackingIndex == Constants::Lion1_Index) && arduboy.everyXFrames(lion1.getSpeed()))     moveLion(lion1, lion2);
-    //     if ((lionAttacking == Direction::None || lionAttackingIndex == Constants::Lion2_Index) && arduboy.everyXFrames(lion2.getSpeed()))     moveLion(lion2, lion1);
-
-    // }
-
-
-    // // --------------------------------------------------------------------------
-    // //  Render the screen ..
-
-    // renderBackground();
-
-    Sprites::drawOverwrite(0, 0, Images::Background, 0);
-
-    Sprites::drawExternalMask(player.getXDisplay(), 20, Images::Player, Images::Player_Mask, player.getFrame(), player.getFrame());
-
-
-    // // Lions ..
-
-    // renderLion(lion1);
-    // renderLion(lion2);
-
-
-    // // Player ..
-
-    // if (!gameOver) {
-
-    //     player1.updateRunning();
-    //     player2.updateRunning();
-
-    // }
+        case GameScene::Outdoors:
     
-    // renderPlayer(player1, Images::Player_01, Images::Player_01_Mask);
-    // if (gameMode == GameMode::Hard) renderPlayer(player2, Images::Player_02, Images::Player_02_Mask);
+            Sprites::drawOverwrite(0, 0, Images::Background, 1);
+            renderCatcher();
+            break;
 
-    // if (!player1.getRunning() && !player2.getRunning()) {
+    }
 
-    //     renderScoreBoards(score, numberOfLives);
-        
-    // }
-
-
-    // // Chair?
-
-    // if (chair.getDirection() == Direction::Left) {
-
-    //     Sprites::drawExternalMask(chair.getXDisplay(), chair.getYDisplay(), Images::Chair_LH, Images::Chair_LH_Mask, chair.getFrame(), chair.getFrame());
-
-    // }
-
-    // if (chair.getDirection() == Direction::Right) {
-
-    //     Sprites::drawExternalMask(chair.getXDisplay(), chair.getYDisplay(), Images::Chair_RH, Images::Chair_RH_Mask, chair.getFrame(), chair.getFrame());
-
-    // }
+}
 
 
-    // // Is the game over ?
+void catchOil(XPosition xPosition) {
 
-    // if (finished && lionAttacking != Direction::None) {
+    for (uint8_t x = 0; x < Constants::number_Of_Oils; x++) {
 
-    //     if (numberOfLives == 0) {
+        Oil &oil = oils.getOil(x); 
 
-    //         Sprites::drawExternalMask(34, 24, Images::GameOver, Images::GameOver_Mask, 0, 0);
-    //         gameOver = true;
-    //         EEPROM_Utils::saveScore(gameMode, score);
-    //         renderScoreBoards(score, numberOfLives);
+        if (oil.getYPosition() != YPosition::None && oil.getXPosition() == xPosition) {
 
-    //     }
-    //     else {
+            switch (oil.getYPosition()) {
 
-    //         lifeReset();
-    //         counter = 159;            
+                case YPosition::Falling_08 ... YPosition::Falling_08:
+                    if (player.incOilLevel()) {
+                        oil.setYPosition(YPosition::None);
+                    }
+                    break;
 
-    //     }
+                default: break;
+                
+            }
+ 
+        }       
 
-    // }
-
-
-    // // Render counter?
-    // {
-    //     uint8_t frame = 255;
-
-    //     switch (counter) {
-
-    //         case 5 ... 39:
-    //             frame = 3;
-    //             break;
-
-    //         case 45 ... 79:
-    //             frame = 2;
-    //             break;
-
-    //         case 85 ... 119:
-    //             frame = 1;
-    //             break;
-
-    //         case 125 ... 159:
-    //             frame = 0;
-    //             break;
-
-    //         default: break;
-
-    //     }
-     
-    //     if (frame != 255) {
-    //         Sprites::drawExternalMask(55, 24, Images::Count, Images::Count_Mask, frame, 0);
-    //     }
-
-    // }
+    }
 
 }

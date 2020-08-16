@@ -2,19 +2,99 @@
 
 
 // ----------------------------------------------------------------------------
-//  Render background ..
+//  Render player ..
 //
-void renderBackground() {
+void renderPlayer() {
 
-    // Sprites::drawOverwrite(0, 0, Images::Scenery_LH, 0);
-    // Sprites::drawOverwrite(106, 0, Images::Scenery_RH, 0);
-    // Sprites::drawOverwrite(27, 0 , Images::Cage, 0);
+    Sprites::drawErase(player.getXDisplay(), 28, Images::Player, player.getFrame());
 
-    // if (gameMode == GameMode::Easy) {
+    switch (player.getXPosition()) {
 
-    //     Sprites::drawExternalMask(91, 0, Images::FenceRight, Images::FenceRight_Mask, 0, 0);
-    //     Sprites::drawExternalMask(112, 30, Images::Player_Sitting, Images::Player_Sitting_Mask, 0, 0);
+        case XPosition::Position_Tipping_LH:
 
-    // }
+            if (player.getOilLevel() > 0) {
+
+                Sprites::drawOverwrite(0, 37, Images::Bucket_Tilt_LH, player.getOilLevel() - 1);
+
+            }
+
+            break;
+
+        case XPosition::Position_Tipping_RH:
+
+            if (player.getOilLevel() > 0) {
+
+                Sprites::drawOverwrite(126, 37, Images::Bucket_Tilt_RH, player.getOilLevel() - 1);
+
+            }
+
+            break;
+
+        default:
+
+            if (player.getOilLevel() > 0) {
+
+                Sprites::drawExternalMask(player.getXDisplay() + 1, 37, Images::Bucket, Images::Bucket_Mask, player.getOilLevel() - 1, 0);
+
+            }
+
+            break;
+
+    }            
+
+}
+
+
+// ----------------------------------------------------------------------------
+//  Render catcher ..
+//
+void renderCatcher() {
+
+    Sprites::drawErase(catcher.getXDisplay(), 35, Images::Catcher, catcher.getFrame());
+
+}
+
+
+// ----------------------------------------------------------------------------
+//  Render catcher ..
+//
+void renderCatcherMap() {
+
+    arduboy.drawFastVLine(catcher.getXDisplayMap(), 22, 3, BLACK);
+
+}
+
+// ----------------------------------------------------------------------------
+//  Render oil droplets ..
+//
+void renderOil() {
+
+    for (uint8_t x = 0; x < Constants::number_Of_Oils; x++) {
+
+        Oil oil = oils.getOil(x); 
+
+        if (oil.getYPosition() != YPosition::None) {
+
+            switch (oil.getYPosition()) {
+
+                case YPosition::StartDrip_00 ... YPosition::StartDrip_01:
+                    Sprites::drawOverwrite(oil.getXDisplay(), oil.getYDisplay(), Images::Oil_00, 0);
+                    break;
+
+                case YPosition::StartDrip_02 ... YPosition::StartDrip_03:
+                    Sprites::drawOverwrite(oil.getXDisplay(), oil.getYDisplay(), Images::Oil_01, 0);
+                    break;
+
+                case YPosition::Falling_04 ... YPosition::Fire:
+                    Sprites::drawErase(oil.getXDisplay(), oil.getYDisplay(), Images::Oil_02, 0);
+                    break;
+                
+                default: break;
+
+            }
+ 
+        }       
+
+    }
 
 }

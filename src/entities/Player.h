@@ -29,13 +29,16 @@ struct Player {
 
         Direction direction = Direction::None;
         XPosition xPosition = XPosition::Position_10_Oil;
+        uint8_t oilLevel = 0;
 
     public:
 
         XPosition getXPosition()                    { return this->xPosition; }
+        uint8_t getOilLevel()                       { return this->oilLevel; }
 
 
         void setXPosition(XPosition val)            { this->xPosition = val; }
+        void setOilLevel(uint8_t val)               { this->oilLevel = val; }
 
     public:
 
@@ -45,6 +48,17 @@ struct Player {
                 this->direction = Direction::Right;
                 this->xPosition++;
             }
+
+        }
+
+        bool incOilLevel() {
+
+            if (this->oilLevel < 3) {
+                this->oilLevel++;
+                return true;
+            }
+
+            return false;
 
         }
 
@@ -69,8 +83,10 @@ struct Player {
                     this->xPosition++;
                     break;
 
+                default: break;
+
             }
-Serial.println(static_cast<uint8_t>(this->xPosition));
+
             if (this->xEndPoints[static_cast<uint8_t>(this->xPosition)] == 1) {
                 this->direction = Direction::None;
             }

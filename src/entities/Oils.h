@@ -15,15 +15,27 @@ struct Oils {
 
         Oil &getOil(uint8_t x)                       { return this->oils[x]; }
 
-        void launchOil() {
+        void launchOil(uint8_t xDisplay) {
 
             for (uint8_t x = 0; x < Constants::number_Of_Oils; x++) {
 
                 if (oils[x].getYPosition() == YPosition::None) {
 
-                    oils[x].setYPosition(YPosition::StartDrip);
+                    oils[x].setYPosition(YPosition::StartDrip_00);
+                    oils[x].setX(xDisplay);
                     break;
+
                 }
+
+            }
+
+        }
+
+        void update() {
+
+            for (uint8_t x = 0; x < Constants::number_Of_Oils; x++) {
+                
+                oils[x].update();
 
             }
 
