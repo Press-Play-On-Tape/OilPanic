@@ -45,10 +45,40 @@ void playGame(void) {
 
 
 
-    // Update catcher ..
+    // Update entity positions ..
 
     if (arduboy.isFrameCount(8)) {
+        
         catcher.update();
+
+        switch (throwOil) {
+
+            case ThrowOil::LH_Top:
+                throwOil = ThrowOil::LH_Middle;
+                break;
+
+            case ThrowOil::LH_Middle:
+                throwOil = ThrowOil::LH_Bottom;
+                break;
+                
+            case ThrowOil::LH_Bottom:
+                throwOil = ThrowOil::None;
+                break;
+
+            case ThrowOil::RH_Top:
+                throwOil = ThrowOil::RH_Middle;
+                break;
+
+            case ThrowOil::RH_Middle:
+                throwOil = ThrowOil::RH_Bottom;
+                break;
+                
+            case ThrowOil::RH_Bottom:
+                throwOil = ThrowOil::None;
+                break;
+
+        }
+
     }
 
 
@@ -84,9 +114,10 @@ void playGame(void) {
 
             // Change scene?
 
-            if (player.getXPosition() == XPosition::Position_Tipping_LH || player.getXPosition() == XPosition::Position_Tipping_RH) {
+            if (player.getXPosition() == XPosition::Position_Outside_LH || player.getXPosition() == XPosition::Position_Outside_RH) {
 
                 gameScene = GameScene::Outdoors;
+                throwOil = ThrowOil::None;
 
             }
 
@@ -110,19 +141,59 @@ void playGame(void) {
 
         case GameScene::Outdoors:
 
-            if (pressedButton & LEFT_BUTTON && player.getXPosition() == XPosition::Position_Tipping_RH) { 
+            if (pressedButton & LEFT_BUTTON && player.getXPosition() == XPosition::Position_Outside_RH) { 
                 
                 gameScene = GameScene::Indoors; 
                 player.decXPosition();
                 
             }
 
-            if (pressedButton & RIGHT_BUTTON && player.getXPosition() == XPosition::Position_Tipping_LH) { 
+            if (pressedButton & RIGHT_BUTTON && player.getXPosition() == XPosition::Position_Outside_LH) { 
                 
                 gameScene = GameScene::Indoors; 
                 player.incXPosition();
                 
             }
+
+
+            // Are we about to throw the oil?
+
+            switch (player.getXPosition()) {
+
+                case XPosition::Position_Outside_LH:
+
+                    if (catcher.isCatching(Direction::Left) && player.getOilLevel() > 0) {
+Serial.print(score);
+Serial.print(" + ");
+Serial.print(player.getOilLevel());
+
+                        score = score + player.getOilLevel();
+Serial.print(" = ");
+Serial.println(score);
+                        player.setOilLevel(0);
+                        if (throwOil == ThrowOil::None) throwOil = ThrowOil::LH_Top;
+
+                    }
+
+                    break;
+
+                case XPosition::Position_Outside_RH:
+
+                    if (catcher.isCatching(Direction::Right) && player.getOilLevel() > 0) {
+Serial.println(score);
+
+                        score = score + player.getOilLevel();
+                        player.setOilLevel(0);
+                        if (throwOil == ThrowOil::None) throwOil = ThrowOil::RH_Top;
+
+                    }
+
+                    break;
+
+                default: break;
+
+            }
+
 
             break;
 
@@ -137,8 +208,8 @@ void playGame(void) {
 
         case GameScene::Indoors:
 
-            Sprites::drawOverwrite(0, 0, Images::Background, 0);
-            renderPlayer();
+            Sprites::drawOverwrite(0, 0, Images::Indoors, 0);
+            renderPlayer_Indoors();
             renderOil();
             renderCatcherMap();
             break;
@@ -146,11 +217,20 @@ void playGame(void) {
 
         case GameScene::Outdoors:
     
-            Sprites::drawOverwrite(0, 0, Images::Background, 1);
+            for (uint8_t x = 0; x < 12; x++) {
+
+                Sprites::drawOverwrite(0, 0 - outdoorsYOffset + (x * 8), Images::Outdoors, x);
+
+            }
+
+            renderPlayer_Outdoors();
+            renderThrowingOil();
             renderCatcher();
             break;
 
     }
+
+    renderScoreboard(gameScene);
 
 }
 

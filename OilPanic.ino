@@ -24,8 +24,10 @@ int16_t counter = 10;
 uint8_t frameRate = 50;
 uint16_t score = 0;
 uint8_t numberOfLives = 3;
+uint8_t outdoorsYOffset = 0;
 
 bool gameOver = false;
+ThrowOil throwOil = ThrowOil::None;
 
 
 #ifdef SOUNDS
@@ -93,6 +95,7 @@ void loop(void) {
 
             arduboy.setFrameRate(40);
             playGame_Init();
+            gameState = GameState::PlayGame;
             score = 0;
             [[fallthrough]]
 

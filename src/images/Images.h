@@ -5,4 +5,5 @@
 #include "Titles.h"
 #include "Splash.h"
 #include "Oil.h"
+#include "Other.h"
 #include "Catcher.h"

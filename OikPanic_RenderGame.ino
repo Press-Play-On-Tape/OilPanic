@@ -2,9 +2,9 @@
 
 
 // ----------------------------------------------------------------------------
-//  Render player ..
+//  Render player indoors ..
 //
-void renderPlayer() {
+void renderPlayer_Indoors() {
 
     Sprites::drawErase(player.getXDisplay(), 28, Images::Player, player.getFrame());
 
@@ -14,7 +14,7 @@ void renderPlayer() {
 
             if (player.getOilLevel() > 0) {
 
-                Sprites::drawOverwrite(0, 37, Images::Bucket_Tilt_LH, player.getOilLevel() - 1);
+                Sprites::drawOverwrite(0, 38, Images::Bucket_Tilt_LH, player.getOilLevel() - 1);
 
             }
 
@@ -46,6 +46,88 @@ void renderPlayer() {
 
 
 // ----------------------------------------------------------------------------
+//  Render player outdoors ..
+//
+void renderPlayer_Outdoors() {
+
+    switch (player.getXPosition()) {
+
+        case XPosition::Position_Outside_LH:
+
+            if (catcher.isCatching(Direction::Left)) {
+
+                Sprites::drawErase(14, 11, Images::Player_Outside, 1);
+
+            }
+            else {
+
+                Sprites::drawErase(14, 11, Images::Player_Outside, 0);
+
+            }
+
+            break;
+
+        case XPosition::Position_Outside_RH:
+
+            if (catcher.isCatching(Direction::Right)) {
+
+                Sprites::drawErase(91, 11, Images::Player_Outside, 3);
+
+            }
+            else {
+
+                Sprites::drawErase(91, 11, Images::Player_Outside, 2);
+
+            }
+
+            break;
+
+        default: break;
+
+    }
+
+}
+
+
+// ----------------------------------------------------------------------------
+//  Render player outdoors ..
+//
+void renderThrowingOil() {
+
+    switch (throwOil) {
+
+        case ThrowOil::LH_Top:
+            Sprites::drawErase(13, 31, Images::ThrowOil_LH, 0);
+            break;
+
+        case ThrowOil::LH_Middle:
+            Sprites::drawErase(12, 35, Images::ThrowOil_LH, 1);
+            break;
+
+        case ThrowOil::LH_Bottom:
+            Sprites::drawErase(13, 39, Images::ThrowOil_LH, 2);
+            break;
+
+        case ThrowOil::RH_Top:
+            Sprites::drawErase(112, 31, Images::ThrowOil_RH, 0);
+            break;
+
+        case ThrowOil::RH_Middle:
+            Sprites::drawErase(113, 35, Images::ThrowOil_RH, 1);
+            break;
+
+        case ThrowOil::RH_Bottom:
+            Sprites::drawErase(112, 39, Images::ThrowOil_RH, 2);
+            break;
+
+
+        default: break;
+
+    }
+
+}
+
+// ----------------------------------------------------------------------------
 //  Render catcher ..
 //
 void renderCatcher() {
@@ -63,6 +145,7 @@ void renderCatcherMap() {
     arduboy.drawFastVLine(catcher.getXDisplayMap(), 22, 3, BLACK);
 
 }
+
 
 // ----------------------------------------------------------------------------
 //  Render oil droplets ..
@@ -94,6 +177,22 @@ void renderOil() {
             }
  
         }       
+
+    }
+
+}
+
+// ----------------------------------------------------------------------------
+//  Render oil droplets ..
+//
+void renderScoreboard(GameScene gameScene) {
+
+    uint8_t digits[3] = {};
+    extractDigits(digits, score);
+    
+    for (uint8_t i = 3, x = 1; i > 0; i--, x = x + 4) {
+
+        Sprites::drawErase(x + (gameScene == GameScene::Outdoors ? 0 : 10), gameScene == GameScene::Outdoors ? 1 : 58, Images::Font, digits[i - 1]);
 
     }
 

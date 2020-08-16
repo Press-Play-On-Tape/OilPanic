@@ -4,6 +4,18 @@
 
 #define _SOUNDS
 
+enum class ThrowOil : uint8_t {
+
+    LH_Top,
+    LH_Middle,
+    LH_Bottom,
+    RH_Top,
+    RH_Middle,
+    RH_Bottom,
+    None    
+
+};
+
 enum class GameState : uint8_t {
 
     Splash_Init,
@@ -41,6 +53,7 @@ enum class Direction : uint8_t {
 
 enum class XPosition : uint8_t {
 
+    Position_Outside_LH,
     Position_Tipping_LH,
     Position_1,
     Position_2,
@@ -62,6 +75,7 @@ enum class XPosition : uint8_t {
     Position_18,
     Position_19,
     Position_Tipping_RH,
+    Position_Outside_RH,
 
 };
 

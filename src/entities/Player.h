@@ -6,23 +6,23 @@
 
 struct Player {
 
-    const int8_t xPositions[21] = { 0,  5,  10, 15, 20,
+    const int8_t xPositions[23] = { 0, 0,  5,  10, 15, 20,
                                     26, 31, 36, 41, 46,
                                     52, 57, 62, 67, 72,
                                     83, 88, 93, 98, 103, 
-                                    104 };
+                                    104, 104 };
 
-    const int8_t xEndPoints[21] = {  1,  0,  0,  0,  0,
+    const int8_t xEndPoints[23] = {  1,  0,  0,  0,  0,  0,
                                      1,  0,  0,  0,  0,
                                      1,  0,  0,  0,  0,
                                      1,  0,  0,  0,  0,
-                                     1 };
+                                     0, 1 };
 
-    const int8_t frames[21] =     { 2, 0, 1, 0, 1,
+    const int8_t frames[23] =     { 2, 2, 0, 1, 0, 1,
                                     0, 1, 0, 1, 0,
                                     1, 0, 1, 0, 1,
                                     0, 1, 0, 1, 0,
-                                    3 };
+                                    3, 3 };
 
 
     private:
@@ -44,7 +44,7 @@ struct Player {
 
         void incXPosition() {
 
-            if (this->xEndPoints[static_cast<uint8_t>(this->xPosition)] == 1 && xPosition < XPosition::Position_Tipping_RH) {
+            if (this->xEndPoints[static_cast<uint8_t>(this->xPosition)] == 1 && xPosition < XPosition::Position_Outside_RH) {
                 this->direction = Direction::Right;
                 this->xPosition++;
             }
@@ -64,7 +64,7 @@ struct Player {
 
         void decXPosition() {
 
-            if (this->xEndPoints[static_cast<uint8_t>(this->xPosition)] == 1 && xPosition > XPosition::Position_Tipping_LH) {
+            if (this->xEndPoints[static_cast<uint8_t>(this->xPosition)] == 1 && xPosition > XPosition::Position_Outside_LH) {
                 this->direction = Direction::Left;
                 this->xPosition--;
             }

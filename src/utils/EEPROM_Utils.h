@@ -66,7 +66,7 @@ uint16_t EEPROM_Utils::getScore(GameMode mode) {
 
 
 /* -----------------------------------------------------------------------------
- *   Save score and return index.  255 not good enough! 
+ *   Save score ..
  */
 void EEPROM_Utils::saveScore(GameMode mode, uint16_t score) {
 

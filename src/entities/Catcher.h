@@ -102,6 +102,20 @@ struct Catcher {
 
         }
 
+        bool isCatching(Direction direction) {
+
+            switch (direction) {
+                
+                case Direction::Left:
+                    return x <= 5;
+                
+                case Direction::Right:
+                    return x >= 17;
+                    
+            }
+
+        }
+
 
 };
 
