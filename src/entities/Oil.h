@@ -9,9 +9,9 @@ struct Oil {
     const int8_t xDisplay[3] =      { 27, 53, 83 };
     const XPosition xPositions[3] =  { XPosition::Position_5_Oil, XPosition::Position_10_Oil, XPosition::Position_15_Oil };
 
-    const int8_t yPositions[15] = { 7, 7, 7, 7, 11, 15,
+    const int8_t yPositions[16] = { 7, 7, 7, 7, 11, 15,
                                     19, 23, 27, 31,
-                                    35, 39, 43, 47, 51 };
+                                    35, 39, 43, 47, 51, 0};
     private:
 
         uint8_t x = 0;
@@ -33,7 +33,7 @@ struct Oil {
 
         void incYPosition() {
 
-            if (yPosition < YPosition::Fire) {
+            if (yPosition < YPosition::None) {
                 this->yPosition++;
             }
 

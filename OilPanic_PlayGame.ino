@@ -120,9 +120,32 @@ void playGame(void) {
 
         case GameScene::Indoors:
 
-            if (arduboy.isFrameCount(6)) {
+            for (uint8_t x = 0; x < Constants::number_Of_Oils; x++) {
 
-                oils.update();
+                Oil &oil = oils.getOil(x);
+
+                switch (oil.getYPosition()) {
+
+                    case YPosition::StartDrip_00 ... YPosition::Falling_13:
+
+                        if (arduboy.isFrameCount(6)) {
+
+                            oil.update();
+
+                        }
+                        break;
+
+                    case YPosition::Fire_00 ... YPosition::Fire_07:
+
+                        if (arduboy.isFrameCount(2)) {
+
+                            oil.update();
+
+                        }
+                        break;
+
+
+                }
 
             }
 

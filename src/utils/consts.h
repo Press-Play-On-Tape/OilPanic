@@ -160,7 +160,14 @@ enum class YPosition : uint8_t {
     Falling_11,
     Falling_12,
     Falling_13,
-    Fire,
+    Fire_00,
+    Fire_01,
+    Fire_02,
+    Fire_03,
+    Fire_04,
+    Fire_05,
+    Fire_06,
+    Fire_07,
     None,
 
 };
