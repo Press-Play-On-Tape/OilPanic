@@ -201,11 +201,13 @@ void renderOil() {
                     break;
 
                 case YPosition::Fire_00 ... YPosition::Fire_03:
-                    Sprites::drawErase(oil.getXDisplay(), 40, Images::Oil_Fire, static_cast<uint8_t>(oil.getYPosition()) - static_cast<uint8_t>(YPosition::Fire_03));
+                    Sprites::drawErase(oil.getXDisplay() - 6, 36, Images::Oil_Fire, static_cast<uint8_t>(oil.getYPosition()) - static_cast<uint8_t>(YPosition::Fire_00));
+                    Serial.println(static_cast<uint8_t>(oil.getYPosition()) - static_cast<uint8_t>(YPosition::Fire_00));
                     break;
 
                 case YPosition::Fire_04 ... YPosition::Fire_07:
-                    Sprites::drawErase(oil.getXDisplay(), 35, Images::Oil_Fire, static_cast<uint8_t>(YPosition::Fire_07) - static_cast<uint8_t>(oil.getYPosition()));
+                    Sprites::drawErase(oil.getXDisplay() - 6, 36, Images::Oil_Fire, static_cast<uint8_t>(YPosition::Fire_07) - static_cast<uint8_t>(oil.getYPosition()));
+                    Serial.println(static_cast<uint8_t>(YPosition::Fire_07) - static_cast<uint8_t>(oil.getYPosition()));
                     break;
                 
                 default: break;
