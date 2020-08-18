@@ -14,7 +14,8 @@ void playGame_Init() {
     gameState = GameState::PlayGame;
     frameRate = 50;
     score = 0;
-    numberOfLives = 3;
+    numberOfLives_Indoors = 3;
+    numberOfLives_Outdoors = 3;
 
 }
 
@@ -26,6 +27,7 @@ void lifeReset() {
 
     counter = 10;
     outdoorsYOffset = 0;
+    gameOverCounter = 0;
 
 }
 
@@ -38,9 +40,14 @@ void playGame(void) {
     uint8_t justPressedButton = arduboy.justPressedButtons();
 
 
+    if (gameOverCounter > 0) {
+        gameOverCounter--;
+    }
+
+
     // Update entity positions ..
 
-    if (arduboy.isFrameCount(8)) {
+    if (!gameOver && arduboy.isFrameCount(8)) {
         
         catcher.update();
 
@@ -48,71 +55,110 @@ void playGame(void) {
 
     if (arduboy.isFrameCount(2)) {
 
-        switch (throwOil) {
+        if (throwOil) {
 
-            case ThrowOil::LH_Top:
-                throwOil++;
-                break;
-
-            case ThrowOil::LH_Miss_Down_Start ... ThrowOil::LH_Miss_Down_End:
-                throwOil++;
-                outdoorsYOffset = outdoorsYOffset + 4;
-                break;
-
-            case ThrowOil::LH_Miss_Bottom_Start ... ThrowOil::LH_Miss_Bottom_End:
-                throwOil++;
-                break;
-
-            case ThrowOil::LH_Miss_Up_Start ... ThrowOil::LH_Miss_Up_NearlyEnd:
-                throwOil++;
-                outdoorsYOffset = outdoorsYOffset - 4;
-                break;
-
-            case ThrowOil::LH_Middle:
-                if (catcher.isCatching(Direction::Left)) {
-                    throwOil = ThrowOil::LH_Bottom;
-                }
-                else {
-                    throwOil = ThrowOil::LH_Miss_Down_Start;
-                }
-                break;
-                
-            case ThrowOil::LH_Bottom:
-                throwOil = ThrowOil::None;
-                break;
-
-            case ThrowOil::RH_Top:
-                throwOil++;
-                break;
-
-            case ThrowOil::RH_Miss_Down_Start ... ThrowOil::RH_Miss_Down_End:
-                throwOil++;
-                outdoorsYOffset = outdoorsYOffset + 4;
-                break;
-
-            case ThrowOil::RH_Miss_Bottom_Start ... ThrowOil::RH_Miss_Bottom_End:
-                throwOil++;
-                break;
-
-            case ThrowOil::RH_Miss_Up_Start ... ThrowOil::RH_Miss_Up_NearlyEnd:
-                throwOil++;
-                outdoorsYOffset = outdoorsYOffset - 4;
-                break;
-
-            case ThrowOil::RH_Middle:
-                if (catcher.isCatching(Direction::Right)) {
-                    throwOil = ThrowOil::RH_Bottom;
-                }
-                else {
-                    throwOil = ThrowOil::RH_Miss_Down_Start;
-                }
-                break;
-                
-            case ThrowOil::RH_Bottom:
-                throwOil = ThrowOil::None;
-                break;
+            gameOver = true;
+            gameOverCounter = 32;
 
         }
+        // switch (throwOil) {
+
+        //     case ThrowOil::LH_Top:
+        //         throwOil++;
+        //         break;
+
+        //     case ThrowOil::LH_Middle:
+        //         if (catcher.isCatching(Direction::Left)) {
+        //             throwOil = ThrowOil::LH_Bottom;
+        //         }
+        //         else {
+        //             throwOil = ThrowOil::LH_Miss_Down_Start;
+        //         }
+        //         break;
+                
+        //     case ThrowOil::LH_Bottom:
+        //         throwOil = ThrowOil::None;
+        //         break;
+
+        //     case ThrowOil::LH_Miss_Down_Start ... ThrowOil::LH_Miss_Down_End:
+                
+        //         throwOil++;
+        //         outdoorsYOffset = outdoorsYOffset + 4;
+                
+        //         if (throwOil == ThrowOil::LH_Miss_Bottom_Start) {
+                
+        //             numberOfLives_Outdoors--;
+
+        //             if (numberOfLives_Outdoors == 0) {
+
+        //                 gameOver = true;
+        //                 gameOverCounter = 32;
+                        
+        //             }
+
+        //         }
+        //         break;
+
+        //     case ThrowOil::LH_Miss_Bottom_Start ... ThrowOil::LH_Miss_Bottom_End:
+        //         throwOil++;
+        //         break;
+
+        //     case ThrowOil::LH_Miss_Up_Start ... ThrowOil::LH_Miss_Up_NearlyEnd:
+        //         if (!gameOver) {
+        //             throwOil++;
+        //             outdoorsYOffset = outdoorsYOffset - 4;
+        //         }
+        //         break;
+
+        //     case ThrowOil::RH_Top:
+        //         throwOil++;
+        //         break;
+
+        //     case ThrowOil::RH_Middle:
+        //         if (catcher.isCatching(Direction::Right)) {
+        //             throwOil = ThrowOil::RH_Bottom;
+        //         }
+        //         else {
+        //             throwOil = ThrowOil::RH_Miss_Down_Start;
+        //         }
+        //         break;
+                
+        //     case ThrowOil::RH_Bottom:
+        //         throwOil = ThrowOil::None;
+        //         break;
+
+        //     case ThrowOil::RH_Miss_Down_Start ... ThrowOil::RH_Miss_Down_End:
+
+        //         throwOil++;
+        //         outdoorsYOffset = outdoorsYOffset + 4;
+
+        //         if (throwOil == ThrowOil::RH_Miss_Bottom_Start) {
+                                
+        //             numberOfLives_Outdoors--;
+
+        //             if (numberOfLives_Outdoors == 0) {
+
+        //                 gameOver = true;
+        //                 gameOverCounter = 32;
+                        
+        //             }
+
+        //         }
+
+        //         break;
+
+        //     case ThrowOil::RH_Miss_Bottom_Start ... ThrowOil::RH_Miss_Bottom_End:
+        //         throwOil++;
+        //         break;
+
+        //     case ThrowOil::RH_Miss_Up_Start ... ThrowOil::RH_Miss_Up_NearlyEnd:
+        //         if (!gameOver) {
+        //             throwOil++;
+        //             outdoorsYOffset = outdoorsYOffset - 4;
+        //         }
+        //         break;
+
+        // }
 
     }
 
@@ -130,7 +176,18 @@ void playGame(void) {
 
                         if (arduboy.isFrameCount(6)) {
 
-                            oil.update();
+                            if (oil.update()) {
+
+                                numberOfLives_Indoors--;
+
+                                if (numberOfLives_Indoors == 0) {
+
+                                    gameOver = true;
+                                    gameOverCounter = 32;
+
+                                }
+
+                            }
 
                         }
                         break;
@@ -149,20 +206,24 @@ void playGame(void) {
 
             }
 
-            if (arduboy.isFrameCount(96)) {
+            if (!gameOver) {
 
-                oils.launchOil(random(0,3));
-                
+                if (arduboy.isFrameCount(96)) {
+
+                    oils.launchOil(random(0,3));
+                    
+                }
+
+                if (arduboy.isFrameCount(2)) {
+
+                    player.update();
+
+                }
+
+                if (justPressedButton & LEFT_BUTTON)               { player.decXPosition(); }
+                if (justPressedButton & RIGHT_BUTTON)              { player.incXPosition(); }
+
             }
-
-            if (arduboy.isFrameCount(2)) {
-
-                player.update();
-
-            }
-
-            if (justPressedButton & LEFT_BUTTON)               { player.decXPosition(); }
-            if (justPressedButton & RIGHT_BUTTON)              { player.incXPosition(); }
 
 
             // Change scene?
@@ -194,103 +255,73 @@ void playGame(void) {
 
         case GameScene::Outdoors:
 
-            if (justPressedButton & LEFT_BUTTON) {
+            if (!gameOver) {
 
-                switch (player.getXPosition()) {
-                    
-                    case XPosition::Position_Outside_LH:
+                if (justPressedButton & LEFT_BUTTON) {
 
-                        if (catcher.isCatching(Direction::Left)) {
+                    switch (player.getXPosition()) {
+                        
+                        case XPosition::Position_Outside_LH:
 
-                            score = score + player.getOilLevel();
+                            if (catcher.isCatching(Direction::Left)) {
 
-                        }
+                                score = score + player.getOilLevel();
 
-                        if (throwOil == ThrowOil::None && player.getOilLevel() > 0) throwOil = ThrowOil::LH_Top;
-                        player.setXPosition(XPosition::Position_Throwing_LH);
-                        player.setOilLevel(0);
-                        break;
+                            }
 
-                    case XPosition::Position_Throwing_RH:
-                        player.setXPosition(XPosition::Position_Outside_RH);
-                        break;
+                            if (throwOil == ThrowOil::None && player.getOilLevel() > 0) throwOil = ThrowOil::LH_Top;
+                            player.setXPosition(XPosition::Position_Throwing_LH);
+                            player.setOilLevel(0);
+                            break;
 
-                    case XPosition::Position_Outside_RH:
-                        gameScene = GameScene::Indoors; 
-                        player.decXPosition();
-                        break;
+                        case XPosition::Position_Throwing_RH:
+                            player.setXPosition(XPosition::Position_Outside_RH);
+                            break;
 
-                    default: break;
+                        case XPosition::Position_Outside_RH:
+                            gameScene = GameScene::Indoors; 
+                            player.decXPosition();
+                            break;
+
+                        default: break;
+
+                    }
+
+                }
+
+                if (justPressedButton & RIGHT_BUTTON) { 
+
+                    switch (player.getXPosition()) {
+                        
+                        case XPosition::Position_Outside_RH:
+
+                            if (catcher.isCatching(Direction::Right)) {
+
+                                score = score + player.getOilLevel();
+
+                            }
+
+                            if (throwOil == ThrowOil::None && player.getOilLevel() > 0) throwOil = ThrowOil::RH_Top;
+                            player.setOilLevel(0);
+                            player.setXPosition(XPosition::Position_Throwing_RH);
+                            break;
+
+                        case XPosition::Position_Throwing_LH:
+                            player.setXPosition(XPosition::Position_Outside_LH);
+                            break;
+
+                        case XPosition::Position_Outside_LH:
+                            gameScene = GameScene::Indoors; 
+                            player.incXPosition();
+                            break;
+
+                        default: break;
+
+                    }
 
                 }
 
             }
-
-            if (justPressedButton & RIGHT_BUTTON) { 
-
-                switch (player.getXPosition()) {
-                    
-                    case XPosition::Position_Outside_RH:
-
-                        if (catcher.isCatching(Direction::Right)) {
-
-                            score = score + player.getOilLevel();
-
-                        }
-
-                        if (throwOil == ThrowOil::None && player.getOilLevel() > 0) throwOil = ThrowOil::RH_Top;
-                        player.setOilLevel(0);
-                        player.setXPosition(XPosition::Position_Throwing_RH);
-                        break;
-
-                    case XPosition::Position_Throwing_LH:
-                        player.setXPosition(XPosition::Position_Outside_LH);
-                        break;
-
-                    case XPosition::Position_Outside_LH:
-                        gameScene = GameScene::Indoors; 
-                        player.incXPosition();
-                        break;
-
-                    default: break;
-
-                }
-
-            }
-
-
-            // // Are we about to throw the oil?
-
-            // switch (player.getXPosition()) {
-
-            //     case XPosition::Position_Outside_LH:
-
-            //         if (catcher.isCatching(Direction::Left) && player.getOilLevel() > 0) {
-
-            //             score = score + player.getOilLevel();
-            //             player.setOilLevel(0);
-            //             if (throwOil == ThrowOil::None) throwOil = ThrowOil::LH_Top;
-
-            //         }
-
-            //         break;
-
-            //     case XPosition::Position_Outside_RH:
-
-            //         if (catcher.isCatching(Direction::Right) && player.getOilLevel() > 0) {
-
-            //             score = score + player.getOilLevel();
-            //             player.setOilLevel(0);
-            //             if (throwOil == ThrowOil::None) throwOil = ThrowOil::RH_Top;
-
-            //         }
-
-            //         break;
-
-            //     default: break;
-
-            // }
-
 
             break;
 
@@ -330,6 +361,15 @@ void playGame(void) {
 
     renderScoreboard(gameScene);
 
+
+    // Game over ?
+
+    if (gameOver && gameOverCounter == 0) {
+
+        Sprites::drawExternalMask(34, 24, Images::GameOver, Images::GameOver_Mask, 0, 0);
+
+    }
+
 }
 
 
@@ -356,5 +396,110 @@ void catchOil(XPosition xPosition) {
         }       
 
     }
+
+}
+
+
+
+bool updateThrowOil(ThrowOil &throwOil) {
+
+    switch (throwOil) {
+
+        case ThrowOil::LH_Top:
+            throwOil++;
+            break;
+
+        case ThrowOil::LH_Middle:
+            if (catcher.isCatching(Direction::Left)) {
+                throwOil = ThrowOil::LH_Bottom;
+            }
+            else {
+                throwOil = ThrowOil::LH_Miss_Down_Start;
+            }
+            break;
+            
+        case ThrowOil::LH_Bottom:
+            throwOil = ThrowOil::None;
+            break;
+
+        case ThrowOil::LH_Miss_Down_Start ... ThrowOil::LH_Miss_Down_End:
+            
+            throwOil++;
+            outdoorsYOffset = outdoorsYOffset + 4;
+            
+            if (throwOil == ThrowOil::LH_Miss_Bottom_Start) {
+            
+                numberOfLives_Outdoors--;
+
+                if (numberOfLives_Outdoors == 0) {
+
+                    return true;
+                    
+                }
+
+            }
+            break;
+
+        case ThrowOil::LH_Miss_Bottom_Start ... ThrowOil::LH_Miss_Bottom_End:
+            throwOil++;
+            break;
+
+        case ThrowOil::LH_Miss_Up_Start ... ThrowOil::LH_Miss_Up_NearlyEnd:
+            if (!gameOver) {
+                throwOil++;
+                outdoorsYOffset = outdoorsYOffset - 4;
+            }
+            break;
+
+        case ThrowOil::RH_Top:
+            throwOil++;
+            break;
+
+        case ThrowOil::RH_Middle:
+            if (catcher.isCatching(Direction::Right)) {
+                throwOil = ThrowOil::RH_Bottom;
+            }
+            else {
+                throwOil = ThrowOil::RH_Miss_Down_Start;
+            }
+            break;
+            
+        case ThrowOil::RH_Bottom:
+            throwOil = ThrowOil::None;
+            break;
+
+        case ThrowOil::RH_Miss_Down_Start ... ThrowOil::RH_Miss_Down_End:
+
+            throwOil++;
+            outdoorsYOffset = outdoorsYOffset + 4;
+
+            if (throwOil == ThrowOil::RH_Miss_Bottom_Start) {
+                            
+                numberOfLives_Outdoors--;
+
+                if (numberOfLives_Outdoors == 0) {
+
+                    return true;
+                    
+                }
+
+            }
+
+            break;
+
+        case ThrowOil::RH_Miss_Bottom_Start ... ThrowOil::RH_Miss_Bottom_End:
+            throwOil++;
+            break;
+
+        case ThrowOil::RH_Miss_Up_Start ... ThrowOil::RH_Miss_Up_NearlyEnd:
+            if (!gameOver) {
+                throwOil++;
+                outdoorsYOffset = outdoorsYOffset - 4;
+            }
+            break;
+
+    }
+
+    return false;
 
 }

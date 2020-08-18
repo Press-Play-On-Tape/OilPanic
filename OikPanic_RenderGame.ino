@@ -202,12 +202,10 @@ void renderOil() {
 
                 case YPosition::Fire_00 ... YPosition::Fire_03:
                     Sprites::drawErase(oil.getXDisplay() - 6, 36, Images::Oil_Fire, static_cast<uint8_t>(oil.getYPosition()) - static_cast<uint8_t>(YPosition::Fire_00));
-                    Serial.println(static_cast<uint8_t>(oil.getYPosition()) - static_cast<uint8_t>(YPosition::Fire_00));
                     break;
 
                 case YPosition::Fire_04 ... YPosition::Fire_07:
                     Sprites::drawErase(oil.getXDisplay() - 6, 36, Images::Oil_Fire, static_cast<uint8_t>(YPosition::Fire_07) - static_cast<uint8_t>(oil.getYPosition()));
-                    Serial.println(static_cast<uint8_t>(YPosition::Fire_07) - static_cast<uint8_t>(oil.getYPosition()));
                     break;
                 
                 default: break;
@@ -228,9 +226,39 @@ void renderScoreboard(GameScene gameScene) {
     uint8_t digits[3] = {};
     extractDigits(digits, score);
     
-    for (uint8_t i = 3, x = 1; i > 0; i--, x = x + 4) {
+    switch (gameScene) {
 
-        Sprites::drawErase(x + (gameScene == GameScene::Outdoors ? 0 : 10), gameScene == GameScene::Outdoors ? 1 : 58, Images::Font, digits[i - 1]);
+        case GameScene::Indoors:
+
+            for (uint8_t i = 3, x = 1; i > 0; i--, x = x + 4) {
+
+                Sprites::drawErase(x + 10, 58, Images::Font, digits[i - 1]);
+
+            }
+
+            for (uint8_t i = 0, x = 116; i < numberOfLives_Indoors; i++, x = x - 2) {
+
+                arduboy.drawFastVLine(x, 58, 5, BLACK);
+
+            }
+
+            break;
+
+        case GameScene::Outdoors:
+
+            for (uint8_t i = 3, x = 1; i > 0; i--, x = x + 4) {
+
+                Sprites::drawErase(x, 1, Images::Font, digits[i - 1]);
+
+            }
+
+            for (uint8_t i = 0, x = 126; i < numberOfLives_Outdoors; i++, x = x - 2) {
+
+                arduboy.drawFastVLine(x, 1, 5, BLACK);
+
+            }
+
+            break;
 
     }
 

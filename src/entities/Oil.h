@@ -51,11 +51,15 @@ struct Oil {
 
         }
 
-        void update() {
+        bool update() {
 
-            if (yPosition < YPosition::None) {
+            if (this->yPosition < YPosition::None) {
+
                 this->yPosition++;
+
             }
+
+            return this->yPosition == YPosition::Fire_00;
 
         }
 

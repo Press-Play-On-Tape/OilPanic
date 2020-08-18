@@ -23,8 +23,10 @@ GameScene gameScene = GameScene::Indoors;
 int16_t counter = 10;
 uint8_t frameRate = 50;
 uint16_t score = 0;
-uint8_t numberOfLives = 3;
+uint8_t numberOfLives_Indoors = 3;
+uint8_t numberOfLives_Outdoors = 3;
 uint8_t outdoorsYOffset = 0;
+uint8_t gameOverCounter = 0;
 
 bool gameOver = false;
 ThrowOil throwOil = ThrowOil::None;
