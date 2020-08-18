@@ -55,110 +55,12 @@ void playGame(void) {
 
     if (arduboy.isFrameCount(2)) {
 
-        if (throwOil) {
+        if (updateThrowOil(throwOil)) {
 
             gameOver = true;
             gameOverCounter = 32;
 
         }
-        // switch (throwOil) {
-
-        //     case ThrowOil::LH_Top:
-        //         throwOil++;
-        //         break;
-
-        //     case ThrowOil::LH_Middle:
-        //         if (catcher.isCatching(Direction::Left)) {
-        //             throwOil = ThrowOil::LH_Bottom;
-        //         }
-        //         else {
-        //             throwOil = ThrowOil::LH_Miss_Down_Start;
-        //         }
-        //         break;
-                
-        //     case ThrowOil::LH_Bottom:
-        //         throwOil = ThrowOil::None;
-        //         break;
-
-        //     case ThrowOil::LH_Miss_Down_Start ... ThrowOil::LH_Miss_Down_End:
-                
-        //         throwOil++;
-        //         outdoorsYOffset = outdoorsYOffset + 4;
-                
-        //         if (throwOil == ThrowOil::LH_Miss_Bottom_Start) {
-                
-        //             numberOfLives_Outdoors--;
-
-        //             if (numberOfLives_Outdoors == 0) {
-
-        //                 gameOver = true;
-        //                 gameOverCounter = 32;
-                        
-        //             }
-
-        //         }
-        //         break;
-
-        //     case ThrowOil::LH_Miss_Bottom_Start ... ThrowOil::LH_Miss_Bottom_End:
-        //         throwOil++;
-        //         break;
-
-        //     case ThrowOil::LH_Miss_Up_Start ... ThrowOil::LH_Miss_Up_NearlyEnd:
-        //         if (!gameOver) {
-        //             throwOil++;
-        //             outdoorsYOffset = outdoorsYOffset - 4;
-        //         }
-        //         break;
-
-        //     case ThrowOil::RH_Top:
-        //         throwOil++;
-        //         break;
-
-        //     case ThrowOil::RH_Middle:
-        //         if (catcher.isCatching(Direction::Right)) {
-        //             throwOil = ThrowOil::RH_Bottom;
-        //         }
-        //         else {
-        //             throwOil = ThrowOil::RH_Miss_Down_Start;
-        //         }
-        //         break;
-                
-        //     case ThrowOil::RH_Bottom:
-        //         throwOil = ThrowOil::None;
-        //         break;
-
-        //     case ThrowOil::RH_Miss_Down_Start ... ThrowOil::RH_Miss_Down_End:
-
-        //         throwOil++;
-        //         outdoorsYOffset = outdoorsYOffset + 4;
-
-        //         if (throwOil == ThrowOil::RH_Miss_Bottom_Start) {
-                                
-        //             numberOfLives_Outdoors--;
-
-        //             if (numberOfLives_Outdoors == 0) {
-
-        //                 gameOver = true;
-        //                 gameOverCounter = 32;
-                        
-        //             }
-
-        //         }
-
-        //         break;
-
-        //     case ThrowOil::RH_Miss_Bottom_Start ... ThrowOil::RH_Miss_Bottom_End:
-        //         throwOil++;
-        //         break;
-
-        //     case ThrowOil::RH_Miss_Up_Start ... ThrowOil::RH_Miss_Up_NearlyEnd:
-        //         if (!gameOver) {
-        //             throwOil++;
-        //             outdoorsYOffset = outdoorsYOffset - 4;
-        //         }
-        //         break;
-
-        // }
 
     }
 
