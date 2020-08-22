@@ -190,15 +190,15 @@ void renderOil() {
             switch (oil.getYPosition()) {
 
                 case YPosition::StartDrip_00 ... YPosition::StartDrip_01:
-                    Sprites::drawErase(oil.getXDisplay(), oil.getYDisplay(), Images::Oil_Drop, 0);
+                    Sprites::drawExternalMask(oil.getXDisplay(), oil.getYDisplay(), Images::Oil_Drop, Images::Oil_Drop_Mask, 0, 0);
                     break;
 
                 case YPosition::StartDrip_02 ... YPosition::StartDrip_03:
-                    Sprites::drawErase(oil.getXDisplay(), oil.getYDisplay(), Images::Oil_Drop, 1);
+                    Sprites::drawExternalMask(oil.getXDisplay(), oil.getYDisplay(), Images::Oil_Drop, Images::Oil_Drop_Mask, 1, 1);
                     break;
 
                 case YPosition::Falling_04 ... YPosition::Falling_13:
-                    Sprites::drawErase(oil.getXDisplay(), oil.getYDisplay(), Images::Oil_Drop, 2);
+                    Sprites::drawExternalMask(oil.getXDisplay(), oil.getYDisplay(), Images::Oil_Drop, Images::Oil_Drop_Mask, 2, 2);
                     break;
 
                 case YPosition::Fire_00 ... YPosition::Fire_03:
