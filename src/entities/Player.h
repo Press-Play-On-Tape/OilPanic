@@ -11,6 +11,12 @@ struct Player {
                                     52, 57, 62, 67, 72,
                                     83, 88, 93, 98, 103, 
                                     104, 104, 104 };
+//87 102
+    const int8_t xPositionsMap[25] = { 87, 87, 87, 87, 87, 87,
+                                    88, 89, 90,
+                                    91, 92, 93, 94, 95,
+                                    96, 97, 98, 99, 100, 101, 102, 
+                                    102, 102, 102 };
 
     const int8_t xEndPoints[25] = {  0, 1,  0,  0,  0,  0,  0,
                                      1,  0,  0,  0,  0,
@@ -96,6 +102,12 @@ struct Player {
         int8_t getXDisplay() {
 
             return this->xPositions[static_cast<uint8_t>(this->xPosition)];
+
+        }
+
+        int8_t getXDisplayMap() {
+
+            return this->xPositionsMap[static_cast<uint8_t>(this->xPosition)];
 
         }
 

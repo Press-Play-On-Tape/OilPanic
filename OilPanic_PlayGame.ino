@@ -10,10 +10,13 @@ void playGame_Init() {
     lifeReset();
 
     arduboy.setFrameRate(50);
+    oils.reset();
     
     gameState = GameState::PlayGame;
     frameRate = 50;
     score = 0;
+    gameOver = false;
+    gameOverCounter = 0;
     numberOfLives_Indoors = 3;
     numberOfLives_Outdoors = 3;
 
@@ -64,57 +67,80 @@ void playGame(void) {
 
     }
 
-    switch (gameScene) {
 
-        case GameScene::Indoors:
+    // Update oil positions
 
-            for (uint8_t x = 0; x < Constants::number_Of_Oils; x++) {
+    for (uint8_t x = 0; x < Constants::number_Of_Oils; x++) {
 
-                Oil &oil = oils.getOil(x);
+        Oil &oil = oils.getOil(x);
 
-                switch (oil.getYPosition()) {
+        switch (oil.getYPosition()) {
 
-                    case YPosition::StartDrip_00 ... YPosition::Falling_13:
+            case YPosition::StartDrip_00 ... YPosition::Falling_13:
+                {
 
-                        if (arduboy.isFrameCount(6)) {
+                    uint8_t frameCount = 0;
 
-                            if (oil.update()) {
 
-                                numberOfLives_Indoors--;
+                    // Drop slower if player is outside ..
 
-                                if (numberOfLives_Indoors == 0) {
+                    switch (player.getXPosition()) {
 
-                                    gameOver = true;
-                                    gameOverCounter = 32;
+                        case XPosition::Position_Throwing_LH ... XPosition::Position_Tipping_LH:
+                        case XPosition::Position_Tipping_RH ... XPosition::Position_Throwing_RH:
+                            frameCount = 16;
+                            break;
 
-                                }
+                        default:
+                            frameCount = 8;
+                            break;
+
+                    }
+
+                    if (arduboy.isFrameCount(frameCount)) {
+
+                        if (oil.update()) {
+
+                            numberOfLives_Indoors--;
+
+                            if (numberOfLives_Indoors == 0) {
+
+                                gameOver = true;
+                                gameOverCounter = 32;
 
                             }
 
                         }
-                        break;
 
-                    case YPosition::Fire_00 ... YPosition::Fire_07:
-
-                        if (arduboy.isFrameCount(2)) {
-
-                            oil.update();
-
-                        }
-                        break;
-
+                    }
 
                 }
 
-            }
+                break;
+
+            case YPosition::Fire_00 ... YPosition::Fire_07:
+
+                if (arduboy.isFrameCount(2)) {
+
+                    oil.update();
+
+                }
+                break;
+
+            default: break;
+
+        }
+
+    }
+
+
+    switch (gameScene) {
+
+        case GameScene::Indoors:
 
             if (!gameOver) {
 
-                if (arduboy.isFrameCount(96)) {
-
-                    oils.launchOil(random(0,3));
-                    
-                }
+                oils.launchOil(score);
 
                 if (arduboy.isFrameCount(2)) {
 
@@ -124,6 +150,11 @@ void playGame(void) {
 
                 if (justPressedButton & LEFT_BUTTON)               { player.decXPosition(); }
                 if (justPressedButton & RIGHT_BUTTON)              { player.incXPosition(); }
+
+            }
+            else if (gameOver && gameOverCounter == 0) {
+
+                if (justPressedButton & A_BUTTON)                   { gameState = GameState::Title_Init; }
 
             }
 
@@ -285,7 +316,7 @@ void catchOil(XPosition xPosition) {
 
             switch (oil.getYPosition()) {
 
-                case YPosition::Falling_08 ... YPosition::Falling_11:
+                case YPosition::Falling_09 ... YPosition::Falling_11:
                     if (player.incOilLevel()) {
                         oil.setYPosition(YPosition::None);
                     }
@@ -399,6 +430,8 @@ bool updateThrowOil(ThrowOil &throwOil) {
                 outdoorsYOffset = outdoorsYOffset - 4;
             }
             break;
+
+        default: break;
 
     }
 

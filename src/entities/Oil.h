@@ -6,7 +6,7 @@
 
 struct Oil {
 
-    const int8_t xDisplay[3] =      { 27, 53, 83 };
+    const int8_t xDisplay[3] =      { 31, 57, 88 };
     const XPosition xPositions[3] =  { XPosition::Position_5_Oil, XPosition::Position_10_Oil, XPosition::Position_15_Oil };
 
     const int8_t yPositions[16] = { 7, 7, 7, 7, 11, 15,

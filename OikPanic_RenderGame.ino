@@ -6,7 +6,7 @@
 //
 void renderPlayer_Indoors() {
 
-    Sprites::drawErase(player.getXDisplay(), 28, Images::Player, player.getFrame());
+    Sprites::drawExternalMask(player.getXDisplay(), 29, Images::Player, Images::Player_Mask, player.getFrame(), player.getFrame());
 
     switch (player.getXPosition()) {
 
@@ -34,7 +34,7 @@ void renderPlayer_Indoors() {
 
             if (player.getOilLevel() > 0) {
 
-                Sprites::drawExternalMask(player.getXDisplay() + 1, 37, Images::Bucket, Images::Bucket_Mask, player.getOilLevel() - 1, 0);
+                Sprites::drawErase(player.getXDisplay() + 1, 33, Images::Bucket, player.getOilLevel() - 1);
 
             }
 
@@ -144,7 +144,8 @@ void renderCatcher(uint8_t yOffset) {
 //
 void renderCatcherMap() {
 
-    arduboy.drawFastVLine(catcher.getXDisplayMap(), 22, 3, BLACK);
+    arduboy.drawFastVLine(player.getXDisplayMap() - 4, 21, 3, BLACK);
+    arduboy.drawFastVLine(catcher.getXDisplayMap() - 4, 27, 3, BLACK);
 
 }
 
@@ -189,15 +190,15 @@ void renderOil() {
             switch (oil.getYPosition()) {
 
                 case YPosition::StartDrip_00 ... YPosition::StartDrip_01:
-                    Sprites::drawExternalMask(oil.getXDisplay(), oil.getYDisplay(), Images::Oil_00, Images::Oil_00_Mask, 0, 0);
+                    Sprites::drawErase(oil.getXDisplay(), oil.getYDisplay(), Images::Oil_Drop, 0);
                     break;
 
                 case YPosition::StartDrip_02 ... YPosition::StartDrip_03:
-                    Sprites::drawExternalMask(oil.getXDisplay(), oil.getYDisplay(), Images::Oil_01, Images::Oil_01_Mask, 0, 0);
+                    Sprites::drawErase(oil.getXDisplay(), oil.getYDisplay(), Images::Oil_Drop, 1);
                     break;
 
                 case YPosition::Falling_04 ... YPosition::Falling_13:
-                    Sprites::drawErase(oil.getXDisplay(), oil.getYDisplay(), Images::Oil_02, 0);
+                    Sprites::drawErase(oil.getXDisplay(), oil.getYDisplay(), Images::Oil_Drop, 2);
                     break;
 
                 case YPosition::Fire_00 ... YPosition::Fire_03:
@@ -230,15 +231,15 @@ void renderScoreboard(GameScene gameScene) {
 
         case GameScene::Indoors:
 
-            for (uint8_t i = 3, x = 1; i > 0; i--, x = x + 4) {
+            for (uint8_t i = 3, x = 116; i > 0; i--, x = x + 4) {
 
-                Sprites::drawErase(x + 10, 58, Images::Font, digits[i - 1]);
+                Sprites::drawErase(x, 10, Images::Font, digits[i - 1]);
 
             }
 
-            for (uint8_t i = 0, x = 116; i < numberOfLives_Indoors; i++, x = x - 2) {
+            for (uint8_t i = 0, x = 120; i < numberOfLives_Indoors; i++, x = x - 8) {
 
-                arduboy.drawFastVLine(x, 58, 5, BLACK);
+                Sprites::drawErase(x, 16, Images::Life, 0);
 
             }
 
