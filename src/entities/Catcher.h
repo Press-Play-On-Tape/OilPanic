@@ -6,30 +6,30 @@
 
 struct Catcher {
 
-    const int8_t xPositions[13] = { 12, 
-                                    18, 24, 31, 
-                                    38, 45, 52, 
-                                    60, 67, 74, 81, 87, 
-                                    93, };
+    const int8_t xPositions[24] =     { 12, 
+                                        18, 21, 24, 27, 31, 34, 
+                                        38, 41, 45, 48, 52, 56, 
+                                        60, 63, 67, 70, 74, 77, 81, 84, 87, 90, 
+                                        93, };
 
-    const int8_t xPositionsMap[13] = { 87, 
-                                    88, 90, 91, 
-                                    92, 93, 94,
-                                    95, 97, 98, 99, 100,
-                                    102,  };
+    const int8_t xPositionsMap[24] =  { 87, 
+                                        88, 89, 90, 90, 91, 91, 
+                                        92, 92, 93, 93, 94, 94,
+                                        95, 96, 97, 97, 98, 98, 99, 99, 100, 101,
+                                        102,  };
 
-    const int8_t frames[2][13] =  { 
-                                    { 0,
-                                      2, 1, 2, 
-                                      1, 2, 1, 
-                                      2, 1, 2, 3, 4,
-                                      6 },
-                                    { 0, 
-                                      1, 3, 4, 5, 4, 
-                                      5, 4, 5,
-                                      4, 5, 4, 
-                                      6 }
-                                  };
+    const int8_t frames[2][24] =     { 
+                                        { 0,
+                                          2, 2, 1, 1, 2, 2, 
+                                          1, 1, 2, 2, 1, 1, 
+                                          2, 2, 1, 1, 2, 2, 3, 3, 4, 4,
+                                          6 },
+                                        { 0, 
+                                          1, 1, 3, 3, 4, 4, 5, 5, 4, 4, 
+                                          5, 5, 4, 4, 4, 5,
+                                          4, 4, 5, 5, 4, 4, 
+                                          6 }
+                                     };
 
     private:
 
@@ -37,19 +37,21 @@ struct Catcher {
         uint8_t x = 8;
         uint8_t oilLevel = 0;
         uint8_t turnDelay = 0;
+        uint8_t minTurnDelay = 0;
+        uint8_t maxTurnDelay = 0;
 
     public:
 
         uint8_t getX()                              { return this->x; }
 
-
         void setX(uint8_t val)                      { this->x = val; }
+        void setDirection(Direction val)            { this->direction = val; }
 
     public:
 
         void incXPosition() {
 
-            if (x < 12) {
+            if (x < 23) {
                 this->direction = Direction::Right;
                 this->x++;
             }
@@ -65,7 +67,29 @@ struct Catcher {
 
         }
 
-        void update() {
+        void update(uint16_t score) {
+
+
+            // Decrease average turn delay based on score ..
+
+            switch (score) {
+
+                case 0 ... Constants::turn_Delay_Score_0:
+                    this->minTurnDelay = Constants::turn_Delay_Min_0;
+                    this->maxTurnDelay = Constants::turn_Delay_Max_0;
+                    break;
+
+                case (Constants::turn_Delay_Score_0 + 1) ... Constants::turn_Delay_Score_1:
+                    this->minTurnDelay = Constants::turn_Delay_Min_1;
+                    this->maxTurnDelay = Constants::turn_Delay_Max_1;
+                    break;
+
+                default:
+                    this->minTurnDelay = Constants::turn_Delay_Min_2;
+                    this->maxTurnDelay = Constants::turn_Delay_Max_2;
+                    break;
+                    
+            }
 
             switch (this->direction) {
 
@@ -82,7 +106,7 @@ struct Catcher {
                                 this->x++;
                                 break;
 
-                            case 12:
+                            case 23:
                                 this->direction = Direction::Left;
                                 this->x--;
                                 break;
@@ -96,15 +120,15 @@ struct Catcher {
                     this->x--;
                     if (x == 0) {
                         this->direction = Direction::None;
-                        this->turnDelay = random(5, 8);
+                        this->turnDelay = random(this->minTurnDelay, this->maxTurnDelay);
                     }
                     break;
 
                 case Direction::Right:
                     this->x++;
-                    if (x == 12) {
+                    if (x == 23) {
                         this->direction = Direction::None;
-                        this->turnDelay = random(5, 8);
+                        this->turnDelay = random(this->minTurnDelay, this->maxTurnDelay);
                     }
                     break;
 
@@ -140,7 +164,7 @@ struct Catcher {
                     return x == 0;
                 
                 case Direction::Right:
-                    return x == 12;
+                    return x == 23;
 
                 default: break;
                     

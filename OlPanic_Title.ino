@@ -10,7 +10,7 @@ void title() {
     if (arduboy.justPressed(A_BUTTON) || arduboy.justPressed(B_BUTTON)) { 
 
         gameMode = arduboy.justPressed(A_BUTTON) ? GameMode::Easy : GameMode::Hard;
-        gameState = GameState::PlayGame_Init;
+        gameState = GameState::Instructions_Init;
 
     }
 

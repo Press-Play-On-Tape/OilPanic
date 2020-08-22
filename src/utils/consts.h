@@ -4,6 +4,14 @@
 
 #define _SOUNDS
 
+enum class InstructionsMode : uint8_t {
+
+    Scene1,
+    Scene2,
+
+};
+
+
 enum class ThrowOil : uint8_t {
 
     LH_Top,
@@ -85,6 +93,8 @@ enum class GameState : uint8_t {
     Splash,
     Title_Init,
     Title,
+    Instructions_Init,
+    Instructions,
     PlayGame_Init,
     PlayGame
 
@@ -261,6 +271,15 @@ void extractDigits(uint8_t (&buffer)[size], uint16_t value) {
 namespace Constants {
 
     constexpr uint8_t number_Of_Oils = 6;
- 
+
+    constexpr uint8_t turn_Delay_Score_0  = 75;     
+    constexpr uint8_t turn_Delay_Score_1  = 150;
+    constexpr uint8_t turn_Delay_Min_0    = 10;
+    constexpr uint8_t turn_Delay_Max_0    = 16;
+    constexpr uint8_t turn_Delay_Min_1    = 9;
+    constexpr uint8_t turn_Delay_Max_1    = 15;
+    constexpr uint8_t turn_Delay_Min_2    = 8;
+    constexpr uint8_t turn_Delay_Max_2    = 14;
+
 }
 

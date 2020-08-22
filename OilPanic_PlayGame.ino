@@ -50,9 +50,9 @@ void playGame(void) {
 
     // Update entity positions ..
 
-    if (!gameOver && arduboy.isFrameCount(8)) {
+    if (!gameOver && arduboy.isFrameCount(4)) {
         
-        catcher.update();
+        catcher.update(score);
 
     }
 
@@ -101,12 +101,16 @@ void playGame(void) {
 
                         if (oil.update()) {
 
-                            numberOfLives_Indoors--;
+                            if (numberOfLives_Indoors > 0) {
 
-                            if (numberOfLives_Indoors == 0) {
+                                numberOfLives_Indoors--;
 
-                                gameOver = true;
-                                gameOverCounter = 32;
+                                if (numberOfLives_Indoors == 0) {
+
+                                    gameOver = true;
+                                    gameOverCounter = 32;
+
+                                }
 
                             }
 
@@ -271,7 +275,7 @@ void playGame(void) {
 
             Sprites::drawOverwrite(0, 0, Images::Indoors, 0);
             renderPlayer_Indoors();
-            renderOil();
+            renderOils();
             renderCatcherMap();
             break;
             
@@ -284,10 +288,10 @@ void playGame(void) {
 
             }
 
-            renderPlayer_Outdoors(outdoorsYOffset);
-            renderThrowingOil(outdoorsYOffset);
-            renderCatcher(outdoorsYOffset);
-            renderBystanders(outdoorsYOffset);
+            renderPlayer_Outdoors(0, outdoorsYOffset);
+            renderThrowingOil(0, outdoorsYOffset);
+            renderCatcher(0, outdoorsYOffset);
+            renderBystanders(0, outdoorsYOffset);
             break;
 
     }
@@ -362,12 +366,16 @@ bool updateThrowOil(ThrowOil &throwOil) {
             
             if (throwOil == ThrowOil::LH_Miss_Bottom_Start) {
             
-                numberOfLives_Outdoors--;
+                if (numberOfLives_Outdoors > 0) {
 
-                if (numberOfLives_Outdoors == 0) {
+                    numberOfLives_Outdoors--;
 
-                    return true;
-                    
+                    if (numberOfLives_Outdoors == 0) {
+
+                        return true;
+                        
+                    }
+
                 }
 
             }
@@ -407,17 +415,20 @@ bool updateThrowOil(ThrowOil &throwOil) {
             outdoorsYOffset = outdoorsYOffset + 4;
 
             if (throwOil == ThrowOil::RH_Miss_Bottom_Start) {
-                            
-                numberOfLives_Outdoors--;
 
-                if (numberOfLives_Outdoors == 0) {
+                if (numberOfLives_Outdoors > 0) {      
 
-                    return true;
-                    
+                    numberOfLives_Outdoors--;
+
+                    if (numberOfLives_Outdoors == 0) {
+
+                        return true;
+                        
+                    }
+
                 }
 
             }
-
             break;
 
         case ThrowOil::RH_Miss_Bottom_Start ... ThrowOil::RH_Miss_Bottom_End:

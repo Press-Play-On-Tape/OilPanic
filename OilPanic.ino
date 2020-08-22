@@ -5,8 +5,10 @@
 #include "src/utils/EEPROM_Utils.h"
 #include "src/entities/Entities.h"
 #include "src/sounds/Sounds.h"
+#include "src/fonts/Font3x5.h"
 
 Arduboy2Ext arduboy;
+Font3x5 font3x5 = Font3x5();
 
 #ifdef SOUNDS
     ArduboyTones sound(arduboy.audio.enabled);
@@ -15,10 +17,12 @@ Arduboy2Ext arduboy;
 Player player;
 Catcher catcher;
 Oils oils;
+Oil oil;
 
 GameState gameState = GameState::Splash_Init;
 GameMode gameMode = GameMode::Easy;
 GameScene gameScene = GameScene::Indoors;
+InstructionsMode instructionsMode = InstructionsMode::Scene1;
 
 int16_t counter = 10;
 uint8_t frameRate = 50;
@@ -88,6 +92,18 @@ void loop(void) {
         case GameState::Title:
 
             title();
+            arduboy.displayClearToWhite();
+            break;
+
+        case GameState::Instructions_Init:
+
+            instructions_Init();
+            gameState = GameState::Instructions;
+            [[fallthrough]]
+
+        case GameState::Instructions:
+
+            instructions();
             arduboy.displayClearToWhite();
             break;
 
