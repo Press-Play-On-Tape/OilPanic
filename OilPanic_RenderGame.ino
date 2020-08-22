@@ -4,9 +4,9 @@
 // ----------------------------------------------------------------------------
 //  Render player indoors ..
 //
-void renderPlayer_Indoors() {
+void renderPlayer_Indoors(int8_t xOffset) {
 
-    Sprites::drawExternalMask(player.getXDisplay(), 29, Images::Player, Images::Player_Mask, player.getFrame(), player.getFrame());
+    Sprites::drawExternalMask(player.getXDisplay() + xOffset, 29, Images::Player, Images::Player_Mask, player.getFrame(), player.getFrame());
 
     switch (player.getXPosition()) {
 
@@ -14,7 +14,7 @@ void renderPlayer_Indoors() {
 
             if (player.getOilLevel() > 0) {
 
-                Sprites::drawOverwrite(0, 38, Images::Bucket_Tilt_LH, player.getOilLevel() - 1);
+                Sprites::drawOverwrite(xOffset, 38, Images::Bucket_Tilt_LH, player.getOilLevel() - 1);
 
             }
 
@@ -24,7 +24,7 @@ void renderPlayer_Indoors() {
 
             if (player.getOilLevel() > 0) {
 
-                Sprites::drawOverwrite(126, 37, Images::Bucket_Tilt_RH, player.getOilLevel() - 1);
+                Sprites::drawOverwrite(126 + xOffset, 37, Images::Bucket_Tilt_RH, player.getOilLevel() - 1);
 
             }
 
@@ -34,7 +34,7 @@ void renderPlayer_Indoors() {
 
             if (player.getOilLevel() > 0) {
 
-                Sprites::drawErase(player.getXDisplay() + 1, 33, Images::Bucket, player.getOilLevel() - 1);
+                Sprites::drawErase(player.getXDisplay() + 1 + xOffset, 33, Images::Bucket, player.getOilLevel() - 1);
 
             }
 

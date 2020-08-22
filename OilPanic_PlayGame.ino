@@ -274,7 +274,7 @@ void playGame(void) {
         case GameScene::Indoors:
 
             Sprites::drawOverwrite(0, 0, Images::Indoors, 0);
-            renderPlayer_Indoors();
+            renderPlayer_Indoors(0);
             renderOils();
             renderCatcherMap();
             break;

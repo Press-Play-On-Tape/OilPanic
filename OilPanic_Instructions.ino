@@ -130,8 +130,6 @@
 
     const uint8_t PROGMEM scene1_YCursor[3] =   { 22, 18, 16 };                               
 
-
-
     #define SCENE2_ELEMENT_COUNT 72
 
     const XPosition PROGMEM scene2_PlayerXPosition[SCENE2_ELEMENT_COUNT] = { 
@@ -211,7 +209,6 @@
 
     };
 
-
     const ThrowOil PROGMEM scene2_OilYPosition[SCENE2_ELEMENT_COUNT] = { 
 
         ThrowOil::None, ThrowOil::None, ThrowOil::None, ThrowOil::None,
@@ -237,7 +234,6 @@
         ThrowOil::LH_Miss_Up_08, ThrowOil::LH_Miss_Up_NearlyEnd, ThrowOil::LH_Miss_Up_End, ThrowOil::LH_Miss_Up_End,
 
     };
-
 
     const uint8_t PROGMEM scene2_YOffset[SCENE2_ELEMENT_COUNT] = { 
 
@@ -265,6 +261,32 @@
 
     };
 
+    const uint8_t PROGMEM scene2_Instructions[SCENE2_ELEMENT_COUNT] =   { 
+        
+        255, 255, 1, 1,                                          
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+        1, 1, 1, 1,
+
+        1, 1, 1, 1,
+        1, 1, 1, 1, 
+        255, 255, 2, 2,
+        2, 2, 2, 2,
+        2, 2, 2, 2,
+
+        2, 2, 2, 2,
+        2, 2, 2, 2,
+        2, 2, 2, 2,
+        2, 2, 2, 2,
+        2, 2, 2, 2,
+
+        2, 2, 2, 2,
+        2, 2, 255, 255,
+
+    };      
+
+    const uint8_t PROGMEM scene2_YCursor[3] =   { 18, 16 };                               
 
 // ----------------------------------------------------------------------------
 //  Initialise game ..
@@ -303,6 +325,8 @@ void instructions(void) {
 
 }
 
+#define SCENE1_OFFSET -70
+
 void instructions_Scene1() {
 
     if (arduboy.isFrameCount(8)) {
@@ -313,16 +337,18 @@ void instructions_Scene1() {
     player.setXPosition(static_cast<XPosition>(pgm_read_byte(&scene1_PlayerXPosition[counter])));
     player.setOilLevel(pgm_read_byte(&scene1_OilLevel[counter]));
     oil.setYPosition(static_cast<YPosition>(pgm_read_byte(&scene1_DripYPosition[counter])));
+    oil.setX(0);
 
 
-    Sprites::drawOverwrite(80, 0, Images::Indoors, 0);
-    Sprites::drawExternalMask(player.getXDisplay() + 80, 29, Images::Player, Images::Player_Mask, player.getFrame(), player.getFrame());
-    if (player.getOilLevel() > 0) Sprites::drawErase(player.getXDisplay() + 80 + 1, 33, Images::Bucket, player.getOilLevel() - 1);    
+    Sprites::drawOverwrite(SCENE1_OFFSET, 0, Images::Indoors, 0);
+    renderPlayer_Indoors(SCENE1_OFFSET);
+    // Sprites::drawExternalMask(player.getXDisplay() + SCENE1_OFFSET, 29, Images::Player, Images::Player_Mask, player.getFrame(), player.getFrame());
+    // if (player.getOilLevel() > 0) Sprites::drawErase(player.getXDisplay() + SCENE1_OFFSET + 1, 33, Images::Bucket, player.getOilLevel() - 1);    
 
-    renderOil(oil, 80);
+    renderOil(oil, SCENE1_OFFSET);
 
-    arduboy.drawVerticalDottedLine(0, HEIGHT, 77, BLACK);
-    arduboy.drawVerticalDottedLine(1, HEIGHT, 78, BLACK);
+    arduboy.drawVerticalDottedLine(0, HEIGHT, SCENE1_OFFSET - 3, BLACK);
+    arduboy.drawVerticalDottedLine(1, HEIGHT, SCENE1_OFFSET - 2, BLACK);
 
     font3x5.setCursor(2, pgm_read_byte(&scene1_YCursor[pgm_read_byte(&scene1_Instructions[counter]) - 1]));
     font3x5.setTextColor(BLACK);
@@ -346,7 +372,7 @@ void instructions_Scene1() {
 
 }
 
-#define SCENE2_OFFSET 80
+#define SCENE2_OFFSET 70
 
 void instructions_Scene2() {
 Serial.println(counter);
@@ -380,7 +406,25 @@ Serial.println(counter);
     renderThrowingOil(SCENE2_OFFSET, outdoorsYOffset);
     renderBystanders(SCENE2_OFFSET, outdoorsYOffset);
 
-    arduboy.drawVerticalDottedLine(0, HEIGHT, 77, BLACK);
-    arduboy.drawVerticalDottedLine(1, HEIGHT, 78, BLACK);
+    arduboy.drawVerticalDottedLine(0, HEIGHT, SCENE2_OFFSET - 3, BLACK);
+    arduboy.drawVerticalDottedLine(1, HEIGHT, SCENE2_OFFSET - 2, BLACK);
+
+    font3x5.setCursor(2, pgm_read_byte(&scene2_YCursor[pgm_read_byte(&scene2_Instructions[counter]) - 1]));
+
+    switch (pgm_read_byte(&scene2_Instructions[counter])) {
+
+        case 1:
+            font3x5.print(F("Throw~the~oil~to\nyour~colleague\nto~gain~points."));
+            break;
+
+        case 2:
+            font3x5.print(F("If~he~fails~to\ncatch~the~oil~it\nwill~fall~on~the\ncustomers~below\nand~cost~a~life."));
+            break;
+
+        case 3:
+            font3x5.print(F("Empty~your~bucket\nby~going~outside.\nIt~does~not~need~to\nbe~full~for~you~to\nempty~it."));
+            break;
+
+    }
 
 }
