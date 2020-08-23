@@ -9,8 +9,8 @@ struct Player {
     const int8_t xPositions[25] = { 0, 0, 0,  5,  10, 15, 20,
                                     26, 31, 36, 41, 46,
                                     52, 57, 62, 67, 72,
-                                    83, 88, 93, 98, 103, 
-                                    104, 104, 104 };
+                                    83, 88, 93, 98, 101, 
+                                    100, 100, 100 };
 //87 102
     const int8_t xPositionsMap[25] = { 87, 87, 87, 87, 87, 87,
                                     88, 89, 90,
@@ -117,6 +117,13 @@ struct Player {
 
         }
 
+        void reset() {
+
+            this->direction = Direction::None;
+            this->xPosition = XPosition::Position_10_Oil;
+            this->oilLevel = 0;
+
+        }
 
 };
 

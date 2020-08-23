@@ -11,6 +11,7 @@ void playGame_Init() {
 
     arduboy.setFrameRate(50);
     oils.reset();
+    player.reset();
     
     gameState = GameState::PlayGame;
     frameRate = 50;
@@ -259,7 +260,12 @@ void playGame(void) {
                 }
 
             }
+            else if (gameOver && gameOverCounter == 0) {
 
+                if (justPressedButton & A_BUTTON)                   { gameState = GameState::Title_Init; }
+
+            }
+            
             break;
 
     }
@@ -276,7 +282,7 @@ void playGame(void) {
             Sprites::drawOverwrite(0, 0, Images::Indoors, 0);
             renderPlayer_Indoors(0);
             renderOils();
-            renderCatcherMap();
+            renderCatcherMap(0);
             break;
             
 

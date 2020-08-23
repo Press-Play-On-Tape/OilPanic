@@ -4,13 +4,22 @@
 
 #define _SOUNDS
 
-enum class InstructionsMode : uint8_t {
 
-    Scene1,
-    Scene2,
+enum class GameState : uint8_t {
+
+    Splash_Init,
+    Splash,
+    Title_Init,
+    Title,
+    Instructions_Init,
+    Instructions_Scene1,
+    Instructions_Scene2,
+    Instructions_Scene3,
+    Instructions_Scene4,
+    PlayGame_Init,
+    PlayGame
 
 };
-
 
 enum class ThrowOil : uint8_t {
 
@@ -84,19 +93,6 @@ enum class ThrowOil : uint8_t {
     RH_Miss_Up_NearlyEnd,
     RH_Miss_Up_End,
     None    
-
-};
-
-enum class GameState : uint8_t {
-
-    Splash_Init,
-    Splash,
-    Title_Init,
-    Title,
-    Instructions_Init,
-    Instructions,
-    PlayGame_Init,
-    PlayGame
 
 };
 

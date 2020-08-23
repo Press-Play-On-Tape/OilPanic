@@ -142,10 +142,10 @@ void renderCatcher(int8_t xOffset, uint8_t yOffset) {
 // ----------------------------------------------------------------------------
 //  Render catcher ..
 //
-void renderCatcherMap() {
+void renderCatcherMap(int8_t xOffset) {
 
-    arduboy.drawFastVLine(player.getXDisplayMap() - 4, 21, 3, BLACK);
-    arduboy.drawFastVLine(catcher.getXDisplayMap() - 4, 27, 3, BLACK);
+    arduboy.drawFastVLine(player.getXDisplayMap() - 4 + xOffset, 21, 3, BLACK);
+    arduboy.drawFastVLine(catcher.getXDisplayMap() - 4 + xOffset, 27, 3, BLACK);
 
 }
 
@@ -238,15 +238,21 @@ void renderScoreboard(GameScene gameScene) {
 
         case GameScene::Indoors:
 
-            for (uint8_t i = 3, x = 110; i > 0; i--, x = x + 4) {
+            for (uint8_t i = 3, x = 111; i > 0; i--, x = x + 4) {
 
                 Sprites::drawErase(x, 10, Images::Font, digits[i - 1]);
 
             }
 
-            for (uint8_t i = 0, x = 120; i < numberOfLives_Indoors; i++, x = x - 8) {
+            if (numberOfLives_Indoors < 3) {
 
-                Sprites::drawErase(x, 16, Images::Life, 0);
+                for (uint8_t i = 0, x = 120; i < 3 - numberOfLives_Indoors; i++, x = x - 8) {
+
+                    Sprites::drawErase(x, 16, Images::Life, 0);
+
+                }
+
+                Sprites::drawErase(108, 24, Images::Miss, 0);
 
             }
 

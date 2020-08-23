@@ -22,7 +22,6 @@ Oil oil;
 GameState gameState = GameState::Splash_Init;
 GameMode gameMode = GameMode::Easy;
 GameScene gameScene = GameScene::Indoors;
-InstructionsMode instructionsMode = InstructionsMode::Scene1;
 
 int16_t counter = 10;
 uint8_t frameRate = 50;
@@ -98,11 +97,10 @@ void loop(void) {
         case GameState::Instructions_Init:
 
             instructions_Init();
-            gameState = GameState::Instructions;
+            gameState = GameState::Instructions_Scene1;
             [[fallthrough]]
 
-        case GameState::Instructions:
-
+        case GameState::Instructions_Scene1 ... GameState::Instructions_Scene4:
             instructions();
             arduboy.displayClearToWhite();
             break;
