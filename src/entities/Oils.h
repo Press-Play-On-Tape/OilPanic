@@ -35,7 +35,7 @@ struct Oils {
 
                 }
 
-                this->launchDelay = (score < 240 ? 96 - (score / 10) : 60);
+                this->launchDelay = (score < 240 ? 120 - (score / 10) : 96);
 
             }
 

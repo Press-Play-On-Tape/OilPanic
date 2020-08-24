@@ -302,7 +302,7 @@ void instructions_Init(void) {
 
     outdoorsYOffset = 0;
     player.setOilLevel(0);
-    counter = 150;
+    counter = 0;
 
 }
 
@@ -365,10 +365,10 @@ void instructions_Scene1() {
 
 
     Sprites::drawOverwrite(SCENE1_OFFSET, 0, Images::Indoors, 0);
-    arduboy.fillRect(SCENE1_OFFSET +108, 24, 17, 6, WHITE);
+    arduboy.fillRect(SCENE1_OFFSET + 108, 24, 17, 6, WHITE);
 
     renderPlayer_Indoors(SCENE1_OFFSET);
-    renderOil(oil, SCENE1_OFFSET);
+    renderOil(gameScene, oil, SCENE1_OFFSET, outdoorsYOffset);
 
     arduboy.drawVerticalDottedLine(0, HEIGHT, SCENE1_OFFSET + 128 + 1, BLACK);
     arduboy.drawVerticalDottedLine(1, HEIGHT, SCENE1_OFFSET + 128 + 2, BLACK);

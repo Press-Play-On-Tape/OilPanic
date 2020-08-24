@@ -271,11 +271,11 @@ namespace Constants {
     constexpr uint8_t turn_Delay_Score_0  = 75;     
     constexpr uint8_t turn_Delay_Score_1  = 150;
     constexpr uint8_t turn_Delay_Min_0    = 10;
-    constexpr uint8_t turn_Delay_Max_0    = 16;
+    constexpr uint8_t turn_Delay_Max_0    = 24;
     constexpr uint8_t turn_Delay_Min_1    = 9;
-    constexpr uint8_t turn_Delay_Max_1    = 15;
+    constexpr uint8_t turn_Delay_Max_1    = 20;
     constexpr uint8_t turn_Delay_Min_2    = 8;
-    constexpr uint8_t turn_Delay_Max_2    = 14;
+    constexpr uint8_t turn_Delay_Max_2    = 16;
 
 }
 

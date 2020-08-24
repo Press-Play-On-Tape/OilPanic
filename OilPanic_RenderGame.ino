@@ -179,46 +179,75 @@ void renderBystanders(int8_t xOffset, uint8_t yOffset) {
 // ----------------------------------------------------------------------------
 //  Render oil droplets ..
 //
-void renderOils() {
+void renderOils(GameScene &gameScene, uint8_t yOffset) {
 
     for (uint8_t x = 0; x < Constants::number_Of_Oils; x++) {
 
         Oil oil = oils.getOil(x); 
 
-        renderOil(oil, 0);
+        renderOil(gameScene, oil, 0, outdoorsYOffset);
 
     }
 
 }
 
 
-void renderOil(Oil &oil, int8_t xOffset) {
+void renderOil(GameScene &gameScene, Oil &oil, int8_t xOffset, uint8_t yOffset) {
 
     if (oil.getYPosition() != YPosition::None) {
 
-        switch (oil.getYPosition()) {
+        if (gameScene == GameScene::Indoors) {
 
-            case YPosition::StartDrip_00 ... YPosition::StartDrip_01:
-                Sprites::drawExternalMask(oil.getXDisplay() + xOffset, oil.getYDisplay(), Images::Oil_Drop, Images::Oil_Drop_Mask, 0, 0);
-                break;
+            switch (oil.getYPosition()) {
 
-            case YPosition::StartDrip_02 ... YPosition::StartDrip_03:
-                Sprites::drawExternalMask(oil.getXDisplay() + xOffset, oil.getYDisplay(), Images::Oil_Drop, Images::Oil_Drop_Mask, 1, 1);
-                break;
+                case YPosition::StartDrip_00 ... YPosition::StartDrip_01:
+                    Sprites::drawExternalMask(oil.getXDisplay() + xOffset, oil.getYDisplay(), Images::Oil_Drop, Images::Oil_Drop_Mask, 0, 0);
+                    break;
 
-            case YPosition::Falling_04 ... YPosition::Falling_13:
-                Sprites::drawExternalMask(oil.getXDisplay() + xOffset, oil.getYDisplay(), Images::Oil_Drop, Images::Oil_Drop_Mask, 2, 2);
-                break;
+                case YPosition::StartDrip_02 ... YPosition::StartDrip_03:
+                    Sprites::drawExternalMask(oil.getXDisplay() + xOffset, oil.getYDisplay(), Images::Oil_Drop, Images::Oil_Drop_Mask, 1, 1);
+                    break;
 
-            case YPosition::Fire_00 ... YPosition::Fire_03:
-                Sprites::drawErase(oil.getXDisplay() - 6 + xOffset, 36, Images::Oil_Fire, static_cast<uint8_t>(oil.getYPosition()) - static_cast<uint8_t>(YPosition::Fire_00));
-                break;
+                case YPosition::Falling_04 ... YPosition::Falling_13:
+                    Sprites::drawExternalMask(oil.getXDisplay() + xOffset, oil.getYDisplay(), Images::Oil_Drop, Images::Oil_Drop_Mask, 2, 2);
+                    break;
 
-            case YPosition::Fire_04 ... YPosition::Fire_07:
-                Sprites::drawErase(oil.getXDisplay() - 6 + xOffset, 36, Images::Oil_Fire, static_cast<uint8_t>(YPosition::Fire_07) - static_cast<uint8_t>(oil.getYPosition()));
-                break;
-            
-            default: break;
+                case YPosition::Fire_00 ... YPosition::Fire_03:
+                    Sprites::drawErase(oil.getXDisplay() - 6 + xOffset, 36, Images::Oil_Fire, static_cast<uint8_t>(oil.getYPosition()) - static_cast<uint8_t>(YPosition::Fire_00));
+                    break;
+
+                case YPosition::Fire_04 ... YPosition::Fire_07:
+                    Sprites::drawErase(oil.getXDisplay() - 6 + xOffset, 36, Images::Oil_Fire, static_cast<uint8_t>(YPosition::Fire_07) - static_cast<uint8_t>(oil.getYPosition()));
+                    break;
+                
+                default: break;
+
+            }
+
+        }
+        else {
+
+            switch (oil.getYPosition()) {
+
+                case YPosition::StartDrip_00 ... YPosition::Falling_13:
+                    arduboy.drawPixel(oil.getXDisplayMap() + xOffset, oil.getYDisplayMap() - yOffset, BLACK);
+                    break;
+
+                case YPosition::Fire_00 ... YPosition::Fire_03:
+                    if (oil.getX() == 2) {
+                        Sprites::drawErase(oil.getXDisplayMap() - 1, 20 - yOffset + 8, Images::Oil_Fire_Map, static_cast<uint8_t>(oil.getYPosition()) - static_cast<uint8_t>(YPosition::Fire_00));
+                    }
+                    break;
+
+                case YPosition::Fire_04 ... YPosition::Fire_07:
+                    if (oil.getX() == 2) {
+                        Sprites::drawErase(oil.getXDisplayMap() - 1, 20 - yOffset + 8, Images::Oil_Fire_Map, static_cast<uint8_t>(YPosition::Fire_07) - static_cast<uint8_t>(oil.getYPosition()));
+                    }
+                    break;
+                
+                default: break;
+
+            }
 
         }
 

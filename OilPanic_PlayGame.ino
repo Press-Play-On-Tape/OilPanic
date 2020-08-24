@@ -104,7 +104,7 @@ void playGame(void) {
 
                             if (numberOfLives_Indoors > 0) {
 
-                                numberOfLives_Indoors--;
+                                //SJH numberOfLives_Indoors--;
 
                                 if (numberOfLives_Indoors == 0) {
 
@@ -139,13 +139,20 @@ void playGame(void) {
     }
 
 
+    // Launch Oil ..
+
+    if (!gameOver) {
+
+        oils.launchOil(score);
+
+    }
+
+
     switch (gameScene) {
 
         case GameScene::Indoors:
 
             if (!gameOver) {
-
-                oils.launchOil(score);
 
                 if (arduboy.isFrameCount(2)) {
 
@@ -265,7 +272,7 @@ void playGame(void) {
                 if (justPressedButton & A_BUTTON)                   { gameState = GameState::Title_Init; }
 
             }
-            
+
             break;
 
     }
@@ -281,7 +288,7 @@ void playGame(void) {
 
             Sprites::drawOverwrite(0, 0, Images::Indoors, 0);
             renderPlayer_Indoors(0);
-            renderOils();
+            // renderOils(gameScene, outdoorsYOffset);
             renderCatcherMap(0);
             break;
             
@@ -302,6 +309,7 @@ void playGame(void) {
 
     }
 
+    renderOils(gameScene, outdoorsYOffset);
     renderScoreboard(gameScene);
 
 
@@ -374,7 +382,7 @@ bool updateThrowOil(ThrowOil &throwOil) {
             
                 if (numberOfLives_Outdoors > 0) {
 
-                    numberOfLives_Outdoors--;
+                    //SJH numberOfLives_Outdoors--;
 
                     if (numberOfLives_Outdoors == 0) {
 
@@ -424,7 +432,7 @@ bool updateThrowOil(ThrowOil &throwOil) {
 
                 if (numberOfLives_Outdoors > 0) {      
 
-                    numberOfLives_Outdoors--;
+                    //SJH numberOfLives_Outdoors--;
 
                     if (numberOfLives_Outdoors == 0) {
 
