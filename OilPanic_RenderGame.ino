@@ -53,19 +53,19 @@ void renderPlayer_Outdoors(int8_t xOffset, uint8_t yOffset) {
     switch (player.getXPosition()) {
 
         case XPosition::Position_Outside_LH:
-            Sprites::drawErase(14 + xOffset, 11 - yOffset, Images::Player_Outside, 0);
+            Sprites::drawExternalMask(15 + xOffset, 14 - yOffset, Images::Player_Outside, Images::Player_Outside_Mask, 0, 0);
             break;
 
         case XPosition::Position_Throwing_LH:
-            Sprites::drawErase(14 + xOffset, 11 - yOffset, Images::Player_Outside, 1);
+            Sprites::drawExternalMask(15 + xOffset, 14 - yOffset, Images::Player_Outside, Images::Player_Outside_Mask, 1, 1);
             break;
 
         case XPosition::Position_Outside_RH:
-            Sprites::drawErase(91 + xOffset, 11 - yOffset, Images::Player_Outside, 2);
+            Sprites::drawExternalMask(88 + xOffset, 14 - yOffset, Images::Player_Outside, Images::Player_Outside_Mask, 2, 2);
             break;
 
         case XPosition::Position_Throwing_RH:
-            Sprites::drawErase(91 + xOffset, 11 - yOffset, Images::Player_Outside, 3);
+            Sprites::drawExternalMask(88 + xOffset, 14 - yOffset, Images::Player_Outside, Images::Player_Outside_Mask, 3, 3);
             break;
 
         default: break;
@@ -134,7 +134,7 @@ void renderThrowingOil(int8_t xOffset, uint8_t yOffset) {
 //
 void renderCatcher(int8_t xOffset, uint8_t yOffset) {
 
-    Sprites::drawErase(catcher.getXDisplay() + xOffset, 37 - yOffset, Images::Catcher, catcher.getFrame());
+    Sprites::drawExternalMask(catcher.getXDisplay() + xOffset, 41 - yOffset, Images::Catcher, Images::Catcher_Mask, catcher.getFrame(), catcher.getFrame());
 
 }
 
@@ -192,7 +192,7 @@ void renderOils(GameScene &gameScene, uint8_t yOffset) {
 }
 
 
-void renderOil(GameScene &gameScene, Oil &oil, int8_t xOffset, uint8_t yOffset) {
+void renderOil(GameScene gameScene, Oil &oil, int8_t xOffset, uint8_t yOffset) {
 
     if (oil.getYPosition() != YPosition::None) {
 
@@ -235,13 +235,13 @@ void renderOil(GameScene &gameScene, Oil &oil, int8_t xOffset, uint8_t yOffset) 
 
                 case YPosition::Fire_00 ... YPosition::Fire_03:
                     if (oil.getX() == 2) {
-                        Sprites::drawErase(oil.getXDisplayMap() - 1, 20 - yOffset + 8, Images::Oil_Fire_Map, static_cast<uint8_t>(oil.getYPosition()) - static_cast<uint8_t>(YPosition::Fire_00));
+                        Sprites::drawErase(oil.getXDisplayMap() + xOffset - 1, 20 - yOffset + 8, Images::Oil_Fire_Map, static_cast<uint8_t>(oil.getYPosition()) - static_cast<uint8_t>(YPosition::Fire_00));
                     }
                     break;
 
                 case YPosition::Fire_04 ... YPosition::Fire_07:
                     if (oil.getX() == 2) {
-                        Sprites::drawErase(oil.getXDisplayMap() - 1, 20 - yOffset + 8, Images::Oil_Fire_Map, static_cast<uint8_t>(YPosition::Fire_07) - static_cast<uint8_t>(oil.getYPosition()));
+                        Sprites::drawErase(oil.getXDisplayMap() + xOffset - 1, 20 - yOffset + 8, Images::Oil_Fire_Map, static_cast<uint8_t>(YPosition::Fire_07) - static_cast<uint8_t>(oil.getYPosition()));
                     }
                     break;
                 

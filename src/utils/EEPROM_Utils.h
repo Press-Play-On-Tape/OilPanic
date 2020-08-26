@@ -6,8 +6,7 @@
 #define EEPROM_START                  EEPROM_STORAGE_SPACE_START + 190
 #define EEPROM_START_C1               EEPROM_START
 #define EEPROM_START_C2               EEPROM_START + 1
-#define EEPROM_EASY                   EEPROM_START_C2 + 1
-#define EEPROM_HARD                   EEPROM_EASY + 2
+#define EEPROM_SCORE                  EEPROM_START_C2 + 1
 
 class EEPROM_Utils {
 
@@ -16,8 +15,8 @@ class EEPROM_Utils {
     EEPROM_Utils(){};
         
     static void initEEPROM();
-    static uint16_t getScore(GameMode mode);
-    static void saveScore(GameMode mode, uint16_t score);
+    static uint16_t getScore();
+    static void saveScore(uint16_t score);
     static bool toggleSoundSettings(Arduboy2Ext &arduboy);
 
 };
@@ -26,13 +25,13 @@ class EEPROM_Utils {
 /* ----------------------------------------------------------------------------
  *   Is the EEPROM initialised?
  *
- *   Looks for the characters 'L' and 'T' in the first two bytes of the EEPROM
+ *   Looks for the characters 'O' and 'P' in the first two bytes of the EEPROM
  *   memory range starting from byte EEPROM_STORAGE_SPACE_START.  If not found,
  *   it resets the settings ..
  */
 
-const uint8_t letter1 = 'L'; 
-const uint8_t letter2 = 'T'; 
+const uint8_t letter1 = 'O'; 
+const uint8_t letter2 = 'P'; 
 
 void EEPROM_Utils::initEEPROM() {
 
@@ -45,8 +44,7 @@ void EEPROM_Utils::initEEPROM() {
 
         EEPROM.put(EEPROM_START_C1, letter1);
         EEPROM.put(EEPROM_START_C2, letter2);
-        EEPROM.put(EEPROM_EASY, score);
-        EEPROM.put(EEPROM_HARD, score);
+        EEPROM.put(EEPROM_SCORE, score);
 
     }
 
@@ -56,10 +54,10 @@ void EEPROM_Utils::initEEPROM() {
 /* -----------------------------------------------------------------------------
  *   Get slot details. 
  */
-uint16_t EEPROM_Utils::getScore(GameMode mode) {
+uint16_t EEPROM_Utils::getScore() {
 
     uint16_t score = 0;
-    EEPROM.get(mode == GameMode::Easy ? EEPROM_EASY : EEPROM_HARD, score);
+    EEPROM.get(EEPROM_SCORE, score);
     return score;
 
 }
@@ -68,14 +66,14 @@ uint16_t EEPROM_Utils::getScore(GameMode mode) {
 /* -----------------------------------------------------------------------------
  *   Save score ..
  */
-void EEPROM_Utils::saveScore(GameMode mode, uint16_t score) {
+void EEPROM_Utils::saveScore(uint16_t score) {
 
     uint16_t oldScore = 0;
-    EEPROM.get(mode == GameMode::Easy ? EEPROM_EASY : EEPROM_HARD, oldScore);
+    EEPROM.get(EEPROM_SCORE, oldScore);
 
     if (oldScore < score) {
 
-        EEPROM.update(mode == GameMode::Easy ? EEPROM_EASY : EEPROM_HARD, score);
+        EEPROM.update(EEPROM_SCORE, score);
 
     }
 

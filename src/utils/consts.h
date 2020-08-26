@@ -16,6 +16,7 @@ enum class GameState : uint8_t {
     Instructions_Scene2,
     Instructions_Scene3,
     Instructions_Scene4,
+    Instructions_Scene5,
     PlayGame_Init,
     PlayGame
 
@@ -100,13 +101,6 @@ enum class GameScene : uint8_t {
 
     Indoors,
     Outdoors,
-
-};
-
-enum class GameMode : uint8_t {
-
-    Easy,
-    Hard,
 
 };
 

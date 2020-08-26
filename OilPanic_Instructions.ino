@@ -7,7 +7,10 @@
 #define SCENE2_ELEMENT_COUNT 72
 #define SCENE3_OFFSET -70
 #define SCENE3_ELEMENT_COUNT 56
-#define SCENE4_DELAY 32
+#define SCENE4_OFFSET 34
+#define SCENE4_BORDER 70
+#define SCENE4_ELEMENT_COUNT 100
+#define SCENE5_DELAY 32
 
 const XPosition PROGMEM scene1_PlayerXPosition[SCENE1_ELEMENT_COUNT] = {         
     XPosition::Position_15_Oil, XPosition::Position_15_Oil, XPosition::Position_16, XPosition::Position_16, 
@@ -295,6 +298,9 @@ const uint8_t PROGMEM scene3_Instructions[SCENE3_ELEMENT_COUNT] =   {
 const uint8_t PROGMEM scene3_YCursor[3] =   { 12, 12 };                               
 
 
+const uint8_t PROGMEM scene4_YCursor[3] =   { 16, 5 };                               
+
+
 // ----------------------------------------------------------------------------
 //  Initialise game ..
 //
@@ -330,6 +336,10 @@ void instructions(void) {
             instructions_Scene4();
             break;
 
+        case GameState::Instructions_Scene5:
+            instructions_Scene5();
+            break;
+
         default: break;
 
     }
@@ -337,7 +347,6 @@ void instructions(void) {
     if (arduboy.justPressed(A_BUTTON)) {
         gameState = GameState::PlayGame_Init;
     }
-
 
 }
 
@@ -392,6 +401,18 @@ void instructions_Scene1() {
 
     }
 
+    Sprites::drawOverwrite(62, 58, Images::LeftArrow, 0);
+    Sprites::drawOverwrite(123, 58, Images::RightArrow, 0);
+
+    if (arduboy.justPressed(LEFT_BUTTON)) {
+        counter = 0;
+        gameState = GameState::Title_Init;
+    }
+
+    if (arduboy.justPressed(RIGHT_BUTTON)) {
+        counter = 0;
+        gameState = GameState::Instructions_Scene2;
+    }
 
 }
 
@@ -428,11 +449,7 @@ void instructions_Scene2() {
     outdoorsYOffset = pgm_read_byte(&scene2_YOffset[counter]);
 
     renderPlayer_Outdoors(SCENE2_OFFSET, outdoorsYOffset);
-
-
     renderCatcher(SCENE2_OFFSET, outdoorsYOffset);
-
-
     renderThrowingOil(SCENE2_OFFSET, outdoorsYOffset);
     renderBystanders(SCENE2_OFFSET, outdoorsYOffset);
 
@@ -453,6 +470,19 @@ void instructions_Scene2() {
 
     }
 
+    Sprites::drawOverwrite(1, 58, Images::LeftArrow, 0);
+    Sprites::drawOverwrite(62, 58, Images::RightArrow, 0);
+
+    if (arduboy.justPressed(LEFT_BUTTON)) {
+        counter = 0;
+        gameState = GameState::Instructions_Scene1;
+    }
+
+    if (arduboy.justPressed(RIGHT_BUTTON)) {
+        counter =0;
+        gameState = GameState::Instructions_Scene3;
+    }
+
 }
 
 
@@ -464,7 +494,7 @@ void instructions_Scene3() {
     if (arduboy.isFrameCount(6)) {
         counter++;
         if (counter == SCENE3_ELEMENT_COUNT) {
-            counter = SCENE4_DELAY * 4;
+            counter = 0;
             gameState = GameState::Instructions_Scene4;
         }
 
@@ -496,6 +526,21 @@ void instructions_Scene3() {
 
     }
 
+    Sprites::drawOverwrite(62, 58, Images::LeftArrow, 0);
+    Sprites::drawOverwrite(123, 58, Images::RightArrow, 0);
+
+    if (arduboy.justPressed(LEFT_BUTTON)) {
+        counter = 0;
+        gameState = GameState::Instructions_Scene2;
+    }
+
+    if (arduboy.justPressed(RIGHT_BUTTON)) {
+        counter = 0;
+        gameState = GameState::Instructions_Scene4;
+        outdoorsYOffset = 0;
+        catcher.reset();
+    }
+
 }
 
 
@@ -504,14 +549,102 @@ void instructions_Scene3() {
 //
 void instructions_Scene4() {
 
+
+    // Create an oil drop ?
+
+    outdoorsYOffset++;
+    if (outdoorsYOffset == 80) {
+        oil.setX(random(0, 3));
+        oil.setYPosition(YPosition::StartDrip_00);
+        outdoorsYOffset = 0;
+    }
+
+    if (arduboy.isFrameCount(6)) {
+
+        counter++;
+
+        if (counter == SCENE4_ELEMENT_COUNT) {
+            counter = SCENE5_DELAY * 4;
+            gameState = GameState::Instructions_Scene5;
+        }
+
+    }
+
+
+    for (uint8_t x = 0; x < 8; x++) {
+
+        Sprites::drawOverwrite(SCENE4_OFFSET, (x * 8), Images::Outdoors, x);
+
+    }
+
+    if (!gameOver && arduboy.isFrameCount(4)) {
+        catcher.update(100);
+        oil.update();
+    }
+
+    renderOil(GameScene::Outdoors, oil, SCENE4_OFFSET, 0);
+    renderCatcher(SCENE4_OFFSET, 0);
+
+    arduboy.fillRect(0, 0, SCENE4_BORDER, HEIGHT, WHITE);
+    arduboy.drawVerticalDottedLine(0, HEIGHT, SCENE4_BORDER - 3, BLACK);
+    arduboy.drawVerticalDottedLine(1, HEIGHT, SCENE4_BORDER - 2, BLACK);
+    font3x5.setCursor(2, pgm_read_byte(&scene4_YCursor[counter <= 40 ? 0 : 1]));
+
+    switch (counter) {
+
+        case 2 ... 40:
+            font3x5.print(F("Likewise~when~you\nare~outside~you\ncan~see~drips~\nforming~inside."));
+            break;
+
+        case 43 ... 100:
+            font3x5.print(F("Do~not~spend~too\nlong~outside\nwaiting~for~your\ncolleague~as~you\nmay~cause~a\nfire~inside."));
+            break;
+
+    }
+
+    Sprites::drawOverwrite(1, 58, Images::LeftArrow, 0);
+    Sprites::drawOverwrite(62, 58, Images::RightArrow, 0);
+
+    if (arduboy.justPressed(LEFT_BUTTON)) {
+        counter = 0;
+        gameState = GameState::Instructions_Scene3;
+    }
+
+    if (arduboy.justPressed(RIGHT_BUTTON)) {
+        counter = SCENE5_DELAY * 4;
+        gameState = GameState::Instructions_Scene5;
+    }
+
+}
+
+
+// ----------------------------------------------------------------------------
+//  Render instructions - Scene 5 ..
+//
+void instructions_Scene5() {
+
     counter--;
 
     Sprites::drawOverwrite(3, 26, Images::Ready, 0);
 
-    if (counter > 3 * SCENE4_DELAY)  Sprites::drawExternalMask(100, 10, Images::Barrel, Images::Barrel_Mask, 0, 0);
-    if (counter > 2 * SCENE4_DELAY)  Sprites::drawExternalMask(91, 33, Images::Barrel, Images::Barrel_Mask, 0, 0);
-    if (counter > SCENE4_DELAY)  Sprites::drawExternalMask(109, 33, Images::Barrel, Images::Barrel_Mask, 0, 0);
+    if (counter > 3 * SCENE5_DELAY)  Sprites::drawExternalMask(100, 10, Images::Barrel, Images::Barrel_Mask, 0, 0);
+    if (counter > 2 * SCENE5_DELAY)  Sprites::drawExternalMask(91, 33, Images::Barrel, Images::Barrel_Mask, 0, 0);
+    if (counter > SCENE5_DELAY)  Sprites::drawExternalMask(109, 33, Images::Barrel, Images::Barrel_Mask, 0, 0);
 
     if  (counter == 0) gameState = GameState::PlayGame_Init;
+
+    Sprites::drawOverwrite(1, 58, Images::LeftArrow, 0);
+
+    if (arduboy.justPressed(LEFT_BUTTON)) {
+        counter = 0;
+        gameState = GameState::Instructions_Scene4;
+        outdoorsYOffset = 0;
+        catcher.reset();
+    }
+
+    if (arduboy.justPressed(RIGHT_BUTTON)) {
+        counter = 0;
+        gameState = GameState::Instructions_Scene4;
+    }
 
 }

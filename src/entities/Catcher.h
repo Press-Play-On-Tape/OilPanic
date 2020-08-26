@@ -6,36 +6,47 @@
 
 struct Catcher {
 
-    const int8_t xPositions[24] =     { 12, 
-                                        18, 21, 24, 27, 31, 34, 
-                                        38, 41, 45, 48, 52, 56, 
-                                        60, 63, 67, 70, 74, 77, 81, 84, 87, 90, 
-                                        93, };
-
-    const int8_t xPositionsMap[24] =  { 87, 
-                                        88, 89, 90, 90, 91, 91, 
-                                        92, 92, 93, 93, 94, 94,
-                                        95, 96, 97, 97, 98, 98, 99, 99, 100, 101,
-                                        102,  };
-
-    const int8_t frames[2][24] =     { 
-                                        { 0,
-                                          2, 2, 1, 1, 2, 2, 
-                                          1, 1, 2, 2, 1, 1, 
-                                          2, 2, 1, 1, 2, 2, 3, 3, 4, 4,
-                                          6 },
-                                        { 0, 
-                                          1, 1, 3, 3, 4, 4, 5, 5, 4, 4, 
-                                          5, 5, 4, 4, 4, 5,
-                                          4, 4, 5, 5, 4, 4, 
-                                          6 }
+    const int8_t xPositions[2][25] = {    
+                                        {  6, 14, 14, 22, 22, 
+                                          30, 30, 38, 38, 46, 
+                                          46, 54, 54, 62, 62,
+                                          70, 70, 72, 72, 78, 
+                                          78, 78, 86, 86, 90 }
+                                        ,
+                                        {  6,  9,  9,  9, 13, 
+                                          13, 21, 21, 29, 29,  
+                                          35, 35, 43, 43, 51, 
+                                          51, 59, 59, 67, 67, 
+                                          75, 75, 83, 83, 90 }
                                      };
+
+
+    const int8_t frames[2][25] =     { 
+                                        { 0, 1, 1, 0, 0, 
+                                          1, 1, 0, 0, 1, 
+                                          1, 0, 0, 1, 1, 
+                                          0, 0, 2, 3, 4, 
+                                          5, 5, 6, 6, 5 }
+                                        ,
+                                        { 0, 1, 1, 2, 3, 
+                                          4, 6, 6, 5, 5, 
+                                          6, 6, 5, 5, 6, 
+                                          6, 5, 5, 6, 6, 
+                                          5, 5, 6, 6, 5 }
+                                     };
+
+
+    const int8_t xPositionsMap[25] =  { 87, 88, 89, 90, 90, 
+                                        91, 91, 92, 92, 93, 
+                                        93, 94, 94, 95, 96, 
+                                        97, 97, 98, 98, 99, 
+                                        99, 100, 100, 101, 102,  };
+
 
     private:
 
         Direction direction = Direction::Left;
         uint8_t x = 8;
-        uint8_t oilLevel = 0;
         uint8_t turnDelay = 0;
         uint8_t minTurnDelay = 0;
         uint8_t maxTurnDelay = 0;
@@ -51,7 +62,7 @@ struct Catcher {
 
         void incXPosition() {
 
-            if (x < 23) {
+            if (x < 24) {
                 this->direction = Direction::Right;
                 this->x++;
             }
@@ -106,7 +117,7 @@ struct Catcher {
                                 this->x++;
                                 break;
 
-                            case 23:
+                            case 24:
                                 this->direction = Direction::Left;
                                 this->x--;
                                 break;
@@ -126,7 +137,7 @@ struct Catcher {
 
                 case Direction::Right:
                     this->x++;
-                    if (x == 23) {
+                    if (x == 24) {
                         this->direction = Direction::None;
                         this->turnDelay = random(this->minTurnDelay, this->maxTurnDelay);
                     }
@@ -140,7 +151,7 @@ struct Catcher {
 
         int8_t getXDisplay() {
 
-            return this->xPositions[x];
+            return this->xPositions[this->direction == Direction::Right][x];
 
         }
 
@@ -164,13 +175,23 @@ struct Catcher {
                     return x == 0;
                 
                 case Direction::Right:
-                    return x == 23;
+                    return x == 24;
 
                 default: break;
                     
             }
 
             return false;
+
+        }
+
+        void reset() {
+
+            this->direction = Direction::Left;
+            this->x = 8;
+            this->turnDelay = 0;
+            this->minTurnDelay = 0;
+            this->maxTurnDelay = 0;
 
         }
 

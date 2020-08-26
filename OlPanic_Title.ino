@@ -7,9 +7,8 @@ void title() {
 
     Sprites::drawOverwrite(0, 0, Images::Title, 0);
 
-    if (arduboy.justPressed(A_BUTTON) || arduboy.justPressed(B_BUTTON)) { 
+    if (arduboy.justPressed(A_BUTTON) || arduboy.justPressed(B_BUTTON) || arduboy.justPressed(RIGHT_BUTTON)) { 
 
-        gameMode = arduboy.justPressed(A_BUTTON) ? GameMode::Easy : GameMode::Hard;
         gameState = GameState::Instructions_Init;
 
     }
