@@ -104,7 +104,7 @@ void playGame(void) {
 
                             if (numberOfLives_Indoors > 0) {
 
-                                //SJH numberOfLives_Indoors--;
+                                numberOfLives_Indoors--;
 
                                 if (numberOfLives_Indoors == 0) {
 
@@ -166,7 +166,7 @@ void playGame(void) {
             }
             else if (gameOver && gameOverCounter == 0) {
 
-                if (justPressedButton & A_BUTTON)                   { gameState = GameState::Title_Init; }
+                if (justPressedButton & A_BUTTON)                   { gameState = GameState::HighScore_Init; }
 
             }
 
@@ -269,7 +269,7 @@ void playGame(void) {
             }
             else if (gameOver && gameOverCounter == 0) {
 
-                if (justPressedButton & A_BUTTON)                   { gameState = GameState::Title_Init; }
+                if (justPressedButton & A_BUTTON)                   { gameState = GameState::HighScore_Init; }
 
             }
 
@@ -382,7 +382,7 @@ bool updateThrowOil(ThrowOil &throwOil) {
             
                 if (numberOfLives_Outdoors > 0) {
 
-                    //SJH numberOfLives_Outdoors--;
+                    numberOfLives_Outdoors--;
 
                     if (numberOfLives_Outdoors == 0) {
 
@@ -432,7 +432,7 @@ bool updateThrowOil(ThrowOil &throwOil) {
 
                 if (numberOfLives_Outdoors > 0) {      
 
-                    //SJH numberOfLives_Outdoors--;
+                    numberOfLives_Outdoors--;
 
                     if (numberOfLives_Outdoors == 0) {
 

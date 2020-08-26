@@ -5,8 +5,21 @@
 #define _SOUNDS
 
 
-enum class GameState : uint8_t {
 
+#define NAME_LENGTH 3
+#define NAME_LENGTH_PLUS_TERM (NAME_LENGTH + 1)
+
+#define HS_NAME_LEFT 3
+#define HS_SCORE_LEFT 28
+#define HS_CHAR_TOP 23
+#define HS_CHAR_V_SPACING 8
+#define HS_PRESS_A_DELAY 100
+#define NO_WINNER 255
+
+#define FLASH_FRAME_COUNT 40
+
+
+enum class GameState : uint8_t {
     Splash_Init,
     Splash,
     Title_Init,
@@ -18,12 +31,12 @@ enum class GameState : uint8_t {
     Instructions_Scene4,
     Instructions_Scene5,
     PlayGame_Init,
-    PlayGame
-
+    PlayGame,
+    HighScore_Init,
+    HighScore
 };
 
 enum class ThrowOil : uint8_t {
-
     LH_Top,
     LH_Middle,
     LH_Bottom,
@@ -98,24 +111,19 @@ enum class ThrowOil : uint8_t {
 };
 
 enum class GameScene : uint8_t {
-
     Indoors,
     Outdoors,
-
 };
 
 enum class Direction : uint8_t {
-
     Left,
     Right,
     Up,
     Down,
     None
-
 };
 
 enum class XPosition : uint8_t {
-
     Position_Throwing_LH,
     Position_Outside_LH,
     Position_Tipping_LH,
@@ -141,11 +149,9 @@ enum class XPosition : uint8_t {
     Position_Tipping_RH,
     Position_Outside_RH,
     Position_Throwing_RH,
-
 };
 
 enum class YPosition : uint8_t {
-
     StartDrip_00,
     StartDrip_01,
     StartDrip_02,
@@ -169,7 +175,6 @@ enum class YPosition : uint8_t {
     Fire_06,
     Fire_07,
     None,
-
 };
 
 // --------------------------------------------------------------------
