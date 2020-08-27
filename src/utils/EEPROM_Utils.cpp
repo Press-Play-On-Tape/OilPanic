@@ -66,16 +66,6 @@ namespace EEPROM_Utils {
 
   uint8_t findScore(uint16_t newScore, const SaveEntry * saveEntries) {
 
-Serial.println("FindScores");
-for (uint8_t i = 0; i < saveEntriesCount; ++i) {
-Serial.print(i);
-Serial.print(" ");
-Serial.print(saveEntries[i].name);
-Serial.print(" ");
-Serial.print(saveEntries[i].score);
-Serial.println(" ");
-}
-
     for (uint8_t i = 0; i < saveEntriesCount; ++i) {
 
       const uint16_t oldScore = eeprom_read_word(&saveEntries[i].score);
@@ -96,7 +86,7 @@ Serial.println(" ");
    *   Save score if it is in the top 3, return slot number (or Constants::no_Winner) ..
    */
   uint8_t saveScore(uint16_t newScore) {
-Serial.println("saveScores");
+
     const size_t saveEntriesIndex = saveEntriesStart;
     SaveEntry * saveEntries = reinterpret_cast<SaveEntry *>(saveEntriesIndex);
 

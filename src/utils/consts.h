@@ -2,7 +2,7 @@
 
 #pragma once
 
-#define _SOUNDS
+#define SOUNDS
 
 enum class GameState : uint8_t {
     Splash_Init,
@@ -265,7 +265,7 @@ namespace Constants {
     constexpr uint8_t name_Length               = 3;
     constexpr uint8_t name_Length_Plus_Term     = name_Length + 1;
     constexpr uint8_t no_Winner                 = 255;
-    constexpr uint8_t led_Red_Delay             = 20;
+    constexpr uint8_t led_Red_Delay             = 40;
     constexpr uint8_t led_Green_Delay           = 5;
 
 const uint8_t PROGMEM ledGreenDelays[] = { led_Green_Delay + 1, (led_Green_Delay * 3) + 1, (led_Green_Delay * 5) + 1 };

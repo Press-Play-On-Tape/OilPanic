@@ -74,12 +74,12 @@ void playGame(void) {
 
         if (ledRedCounter == 0) {
 
-            arduboy.setRGBled(GREEN_LED, 0);
+            arduboy.setRGBled(RED_LED, 0);
 
         }
         else {
 
-            arduboy.setRGBled(GREEN_LED, Constants::LED_Brightness);
+            arduboy.setRGBled(RED_LED, Constants::LED_Brightness);
 
         }
 
