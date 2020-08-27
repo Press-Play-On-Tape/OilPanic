@@ -9,12 +9,12 @@
 #include "src/fonts/Font4x6.h"
 
 Arduboy2Ext arduboy;
+#ifdef SOUNDS
+ArduboyTones sound(arduboy.audio.enabled);
+#endif
+
 Font3x5 font3x5 = Font3x5();
 Font4x6 font4x6 = Font4x6();
-
-#ifdef SOUNDS
-    ArduboyTones sound(arduboy.audio.enabled);
-#endif
 
 Player player;
 Catcher catcher;
@@ -23,6 +23,7 @@ Oil oil;
 
 GameState gameState = GameState::Splash_Init;
 GameScene gameScene = GameScene::Indoors;
+ThrowOil throwOil = ThrowOil::None;
 
 int16_t counter = 10;
 uint8_t frameRate = 50;
@@ -31,7 +32,8 @@ uint8_t numberOfLives_Indoors = 3;
 uint8_t numberOfLives_Outdoors = 3;
 uint8_t outdoorsYOffset = 0;
 uint8_t gameOverCounter = 0;
-ThrowOil throwOil = ThrowOil::None;
+uint8_t ledRedCounter = 0;
+uint8_t ledGreenCounter = 0;
 
 bool gameOver = false;
 bool newHighScore = false;
@@ -43,14 +45,14 @@ bool newHighScore = false;
 uint8_t winnerIdx = 0;
 uint8_t charIdx = 0;
 uint8_t clearScores = 0;
-uint8_t pressACounter = HS_PRESS_A_DELAY;
+uint8_t pressACounter = 0;
 
 SaveEntry entries[EEPROM_Utils::saveEntriesCount];
 
 
 #ifdef SOUNDS
-    uint8_t soundCounter = 0;
-    bool sounds = arduboy.audio.enabled();
+uint8_t soundCounter = 0;
+bool soundsOnOff = arduboy.audio.enabled();
 #endif
 
 void setup(void) {
@@ -58,14 +60,13 @@ void setup(void) {
 	arduboy.boot();
 	arduboy.flashlight();
 	arduboy.systemButtons();
-
-    #ifdef SOUNDS    
-	    arduboy.audio.begin();
-    #endif
-
 	arduboy.initRandomSeed();
-	arduboy.setFrameRate(40);
+	arduboy.setFrameRate(50);
     arduboy.setRGBled(0, 0, 0);
+
+    #ifdef SOUNDS
+    arduboy.audio.begin();
+    #endif
 
     EEPROM_Utils::initialiseEEPROM();
 	
@@ -83,6 +84,7 @@ void loop(void) {
 
             splashScreen_Init();
             gameState = GameState::Splash;
+            arduboy.setFrameRate(50);
             [[fallthrough]]
 
         case GameState::Splash:
@@ -95,10 +97,9 @@ void loop(void) {
 
             gameState = GameState::Title;
             counter = 0;
-
+            arduboy.setFrameRate(50);
             #ifdef SOUNDS
-                soundCounter = 0;
-//                sound.tones(Sounds::Title);
+            sound.tones(Sounds::score);
             #endif
             [[fallthrough]]
 
@@ -112,6 +113,10 @@ void loop(void) {
 
             instructions_Init();
             gameState = GameState::Instructions_Scene1;
+            arduboy.setFrameRate(50);
+            #ifdef SOUNDS
+            sound.noTone();
+            #endif
             [[fallthrough]]
 
         case GameState::Instructions_Scene1 ... GameState::Instructions_Scene5:
@@ -122,6 +127,9 @@ void loop(void) {
         case GameState::PlayGame_Init:
 
             playGame_Init();
+            #ifdef SOUNDS
+            sound.noTone();
+            #endif
             [[fallthrough]]
 
         case GameState::PlayGame:
@@ -138,6 +146,10 @@ void loop(void) {
         case GameState::HighScore_Init:
 
             highScore_Init();
+            arduboy.setFrameRate(50);
+            #ifdef SOUNDS
+            sound.noTone();
+            #endif
             [[fallthrough]]
 
         case GameState::HighScore:

@@ -4,7 +4,7 @@
 //
 void splashScreen_Init() {
 
-    //arduboy.setFrameRate(60);
+    arduboy.setFrameRate(60);
     counter = 0;
 
 }

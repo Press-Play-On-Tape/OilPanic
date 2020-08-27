@@ -5,6 +5,9 @@
 #include "../utils/Consts.h"
 #include "Oil.h"
 
+#define LAUNCH_DELAY_MAX 120
+#define LAUNCH_DELAY_MIN 90
+
 struct Oils {
 
     private:
@@ -35,7 +38,7 @@ struct Oils {
 
                 }
 
-                this->launchDelay = (score < 240 ? 120 - (score / 10) : 96);
+                this->launchDelay = (score < 240 ? LAUNCH_DELAY_MAX - (score / 10) : LAUNCH_DELAY_MIN);
 
             }
 
@@ -53,7 +56,7 @@ struct Oils {
 
         void reset() {
 
-            this->launchDelay = 96;
+            this->launchDelay = LAUNCH_DELAY_MAX / 2;
 
         }
 

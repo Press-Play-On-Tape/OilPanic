@@ -87,17 +87,22 @@ struct Catcher {
 
                 case 0 ... Constants::turn_Delay_Score_0:
                     this->minTurnDelay = Constants::turn_Delay_Min_0;
-                    this->maxTurnDelay = Constants::turn_Delay_Max_0;
+                    this->maxTurnDelay = Constants::turn_Delay_Min_0 * 2;
                     break;
 
                 case (Constants::turn_Delay_Score_0 + 1) ... Constants::turn_Delay_Score_1:
                     this->minTurnDelay = Constants::turn_Delay_Min_1;
-                    this->maxTurnDelay = Constants::turn_Delay_Max_1;
+                    this->maxTurnDelay = Constants::turn_Delay_Min_1 * 2;
+                    break;
+
+                case (Constants::turn_Delay_Score_1 + 1) ... Constants::turn_Delay_Score_2:
+                    this->minTurnDelay = Constants::turn_Delay_Min_2;
+                    this->maxTurnDelay = Constants::turn_Delay_Min_2 * 2;
                     break;
 
                 default:
-                    this->minTurnDelay = Constants::turn_Delay_Min_2;
-                    this->maxTurnDelay = Constants::turn_Delay_Max_2;
+                    this->minTurnDelay = Constants::turn_Delay_Min_3;
+                    this->maxTurnDelay = Constants::turn_Delay_Min_3 * 2;
                     break;
                     
             }

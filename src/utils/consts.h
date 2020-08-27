@@ -4,21 +4,6 @@
 
 #define _SOUNDS
 
-
-
-#define NAME_LENGTH 3
-#define NAME_LENGTH_PLUS_TERM (NAME_LENGTH + 1)
-
-#define HS_NAME_LEFT 3
-#define HS_SCORE_LEFT 28
-#define HS_CHAR_TOP 23
-#define HS_CHAR_V_SPACING 8
-#define HS_PRESS_A_DELAY 100
-#define NO_WINNER 255
-
-#define FLASH_FRAME_COUNT 40
-
-
 enum class GameState : uint8_t {
     Splash_Init,
     Splash,
@@ -267,14 +252,23 @@ namespace Constants {
 
     constexpr uint8_t number_Of_Oils = 6;
 
-    constexpr uint8_t turn_Delay_Score_0  = 75;     
-    constexpr uint8_t turn_Delay_Score_1  = 150;
-    constexpr uint8_t turn_Delay_Min_0    = 10;
-    constexpr uint8_t turn_Delay_Max_0    = 24;
-    constexpr uint8_t turn_Delay_Min_1    = 9;
-    constexpr uint8_t turn_Delay_Max_1    = 20;
-    constexpr uint8_t turn_Delay_Min_2    = 8;
-    constexpr uint8_t turn_Delay_Max_2    = 16;
+    constexpr uint8_t turn_Delay_Score_0        = 40;     
+    constexpr uint8_t turn_Delay_Score_1        = 80;
+    constexpr uint8_t turn_Delay_Score_2        = 120;
+    constexpr uint8_t turn_Delay_Min_0          = 20;
+    constexpr uint8_t turn_Delay_Min_1          = 17;
+    constexpr uint8_t turn_Delay_Min_2          = 14;
+    constexpr uint8_t turn_Delay_Min_3          = 11;
+
+    constexpr uint8_t LED_Brightness            = 8;
+
+    constexpr uint8_t name_Length               = 3;
+    constexpr uint8_t name_Length_Plus_Term     = name_Length + 1;
+    constexpr uint8_t no_Winner                 = 255;
+    constexpr uint8_t led_Red_Delay             = 20;
+    constexpr uint8_t led_Green_Delay           = 5;
+
+const uint8_t PROGMEM ledGreenDelays[] = { led_Green_Delay + 1, (led_Green_Delay * 3) + 1, (led_Green_Delay * 5) + 1 };
 
 }
 

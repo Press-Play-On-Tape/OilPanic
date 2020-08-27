@@ -1,5 +1,14 @@
 #include <Arduboy2.h>
 
+
+#define HS_NAME_LEFT 81
+#define HS_SCORE_LEFT HS_NAME_LEFT + 24
+#define HS_CHAR_TOP 22
+#define HS_CHAR_V_SPACING 8
+#define HS_PRESS_A_DELAY 100
+#define FLASH_FRAME_COUNT 40
+
+
 // ----------------------------------------------------------------------------
 //  High Score init ..
 //
@@ -8,10 +17,13 @@ void highScore_Init(void) {
     charIdx = 0;
     clearScores = 0;
     pressACounter = HS_PRESS_A_DELAY;
-    winnerIdx = (score > 0 ? EEPROM_Utils::saveScore(score) : NO_WINNER);
+    winnerIdx = (score > 0 ? EEPROM_Utils::saveScore(score) : Constants::no_Winner);
     gameState = GameState::HighScore;
 
     arduboy.clearButtonState();
+    arduboy.setRGBled(GREEN_LED, 0);
+    arduboy.setRGBled(RED_LED, 0);
+
 
     // Retrieve existing names and scores ..
 
@@ -33,7 +45,7 @@ void highScore(void) {
 
     // Is the new score a high score ?
 
-    if (winnerIdx < NO_WINNER) {
+    if (winnerIdx < Constants::no_Winner) {
 
         if (arduboy.everyXFrames(4)) {
                 
@@ -70,7 +82,7 @@ void highScore(void) {
                         EEPROM_Utils::saveChar(winnerIdx, i, player[i]);
                     }
 
-                    winnerIdx = NO_WINNER;
+                    winnerIdx = Constants::no_Winner;
                     pressACounter = HS_PRESS_A_DELAY;
 
                 }
@@ -158,7 +170,7 @@ void highScore(void) {
 
     // Render edit field if the slot is being editted ..
 
-    if (winnerIdx < NO_WINNER && flash) {
+    if (winnerIdx < Constants::no_Winner && flash) {
 
         char *player = entries[winnerIdx].name;
 
@@ -171,11 +183,11 @@ void highScore(void) {
 
     // Display Press A message?
 
-    if (winnerIdx == NO_WINNER && pressACounter == 0) {
+    if (winnerIdx == Constants::no_Winner && pressACounter == 0) {
 
-        font4x6.setCursor(HS_NAME_LEFT, 51);
+        font4x6.setCursor(HS_NAME_LEFT + 3, 51);
         font4x6.print("Press");
-        Sprites::drawOverwrite(33, 50, Images::PressA, 0);
+        Sprites::drawOverwrite(HS_NAME_LEFT + 33, 50, Images::PressA, 0);
 
     }
 

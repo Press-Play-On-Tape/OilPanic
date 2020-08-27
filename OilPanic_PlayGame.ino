@@ -9,11 +9,13 @@ void playGame_Init() {
 
     lifeReset();
 
-    arduboy.setFrameRate(50);
+    arduboy.setFrameRate(40);
     oils.reset();
     player.reset();
     
     gameState = GameState::PlayGame;
+    gameScene = GameScene::Indoors;
+
     frameRate = 50;
     score = 0;
     gameOver = false;
@@ -43,6 +45,45 @@ void playGame(void) {
 
     uint8_t justPressedButton = arduboy.justPressedButtons();
 
+
+    // Handle LEDS ..
+
+    if (ledGreenCounter > 0) {
+
+        ledGreenCounter--;
+
+        switch (ledGreenCounter) {
+
+            case 1 ... Constants::led_Green_Delay: 
+            case (Constants::led_Green_Delay * 2) + 1 ... (Constants::led_Green_Delay * 3): 
+            case (Constants::led_Green_Delay * 4) + 1 ... (Constants::led_Green_Delay * 5):  
+                arduboy.setRGBled(GREEN_LED, Constants::LED_Brightness);
+                break;
+
+            default:
+                arduboy.setRGBled(GREEN_LED, 0);
+                break;
+
+        }
+
+    }
+
+    if (ledRedCounter > 0) {
+
+        ledRedCounter--;
+
+        if (ledRedCounter == 0) {
+
+            arduboy.setRGBled(GREEN_LED, 0);
+
+        }
+        else {
+
+            arduboy.setRGBled(GREEN_LED, Constants::LED_Brightness);
+
+        }
+
+    }
 
     if (gameOverCounter > 0) {
         gameOverCounter--;
@@ -103,8 +144,12 @@ void playGame(void) {
                         if (oil.update()) {
 
                             if (numberOfLives_Indoors > 0) {
-
+                                
+                                #ifdef SOUNDS
+                                sound.tones(Sounds::fireStarted);
+                                #endif
                                 numberOfLives_Indoors--;
+                                ledRedCounter = Constants::led_Red_Delay;
 
                                 if (numberOfLives_Indoors == 0) {
 
@@ -211,6 +256,11 @@ void playGame(void) {
                             if (catcher.isCatching(Direction::Left)) {
 
                                 score = score + player.getOilLevel();
+                                ledGreenCounter = pgm_read_byte(&Constants::ledGreenDelays[player.getOilLevel() - 1]);
+
+                                #ifdef SOUNDS
+                                sound.tones(Sounds::scoreAdded);
+                                #endif
 
                             }
 
@@ -243,6 +293,11 @@ void playGame(void) {
                             if (catcher.isCatching(Direction::Right)) {
 
                                 score = score + player.getOilLevel();
+                                ledGreenCounter = pgm_read_byte(&Constants::ledGreenDelays[player.getOilLevel() - 1]);
+
+                                #ifdef SOUNDS
+                                sound.tones(Sounds::scoreAdded);
+                                #endif
 
                             }
 
@@ -336,7 +391,12 @@ void catchOil(XPosition xPosition) {
 
                 case YPosition::Falling_09 ... YPosition::Falling_11:
                     if (player.incOilLevel()) {
+
                         oil.setYPosition(YPosition::None);
+                        #ifdef SOUNDS
+                        sound.tones(Sounds::catchOil);
+                        #endif
+
                     }
                     break;
 
@@ -365,7 +425,12 @@ bool updateThrowOil(ThrowOil &throwOil) {
                 throwOil = ThrowOil::LH_Bottom;
             }
             else {
+
                 throwOil = ThrowOil::LH_Miss_Down_Start;
+                #ifdef SOUNDS
+                sound.tones(Sounds::falling);
+                #endif
+
             }
             break;
             
@@ -383,6 +448,7 @@ bool updateThrowOil(ThrowOil &throwOil) {
                 if (numberOfLives_Outdoors > 0) {
 
                     numberOfLives_Outdoors--;
+                    ledRedCounter = Constants::led_Red_Delay;;
 
                     if (numberOfLives_Outdoors == 0) {
 
@@ -415,7 +481,12 @@ bool updateThrowOil(ThrowOil &throwOil) {
                 throwOil = ThrowOil::RH_Bottom;
             }
             else {
+
                 throwOil = ThrowOil::RH_Miss_Down_Start;
+                #ifdef SOUNDS
+                sound.tones(Sounds::falling);
+                #endif
+
             }
             break;
             
@@ -433,6 +504,7 @@ bool updateThrowOil(ThrowOil &throwOil) {
                 if (numberOfLives_Outdoors > 0) {      
 
                     numberOfLives_Outdoors--;
+                    ledRedCounter = Constants::led_Red_Delay;;
 
                     if (numberOfLives_Outdoors == 0) {
 

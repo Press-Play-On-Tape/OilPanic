@@ -2,6 +2,9 @@
 #include "Arduboy2Ext.h"
 
 #include <avr/eeprom.h>
+#include "consts.h"
+
+
 
 /* ----------------------------------------------------------------------------
  *   Is the EEPROM initialised?
@@ -85,12 +88,12 @@ Serial.println(" ");
 
     }
 
-    return NO_WINNER;
+    return Constants::no_Winner;
 
   }
 
   /* -----------------------------------------------------------------------------
-   *   Save score if it is in the top 3, return slot number (or NO_WINNER) ..
+   *   Save score if it is in the top 3, return slot number (or Constants::no_Winner) ..
    */
   uint8_t saveScore(uint16_t newScore) {
 Serial.println("saveScores");
@@ -99,9 +102,9 @@ Serial.println("saveScores");
 
     const uint8_t targetIndex = findScore(newScore, saveEntries);
 
-    if (targetIndex == NO_WINNER) {
+    if (targetIndex == Constants::no_Winner) {
 
-      return NO_WINNER;
+      return Constants::no_Winner;
 
     }
 
@@ -175,4 +178,28 @@ Serial.println("saveScores");
 
   }
 
+}
+
+
+
+/* ----------------------------------------------------------------------------
+ *  Toggle the sound setting and commit to the EEPROM.
+ */
+bool EEPROM_Utils::toggleSoundSettings(Arduboy2Ext &arduboy) {
+
+    if (arduboy.audio.enabled()) {
+
+        arduboy.audio.off(); 
+        arduboy.audio.saveOnOff();
+        return false;
+
+    }
+    else {
+
+        arduboy.audio.on(); 
+        arduboy.audio.saveOnOff();
+        return true;
+
+    }
+    
 }

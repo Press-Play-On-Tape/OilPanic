@@ -6,7 +6,7 @@
 
 struct SaveEntry
 {
-	static constexpr size_t nameSize = NAME_LENGTH_PLUS_TERM;
+	static constexpr size_t nameSize = Constants::name_Length_Plus_Term;
 	static constexpr size_t nameCount = (nameSize - 1);
 
 	uint16_t score;
