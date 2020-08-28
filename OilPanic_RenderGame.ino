@@ -215,11 +215,11 @@ void renderOil(GameScene gameScene, Oil &oil, int8_t xOffset, uint8_t yOffset) {
                     break;
 
                 case YPosition::Fire_00 ... YPosition::Fire_03:
-                    Sprites::drawErase(oil.getXDisplay() - 6 + xOffset, 36, Images::Oil_Fire, static_cast<uint8_t>(oil.getYPosition()) - static_cast<uint8_t>(YPosition::Fire_00));
+                    Sprites::drawExternalMask(oil.getXDisplay() - 1 + xOffset, 24, Images::Oil_Fire, Images::Oil_Fire_Mask, static_cast<uint8_t>(oil.getYPosition()) - static_cast<uint8_t>(YPosition::Fire_00), static_cast<uint8_t>(oil.getYPosition()) - static_cast<uint8_t>(YPosition::Fire_00));
                     break;
 
                 case YPosition::Fire_04 ... YPosition::Fire_07:
-                    Sprites::drawErase(oil.getXDisplay() - 6 + xOffset, 36, Images::Oil_Fire, static_cast<uint8_t>(YPosition::Fire_07) - static_cast<uint8_t>(oil.getYPosition()));
+                    Sprites::drawExternalMask(oil.getXDisplay() - 1 + xOffset, 24, Images::Oil_Fire, Images::Oil_Fire_Mask, static_cast<uint8_t>(YPosition::Fire_07) - static_cast<uint8_t>(oil.getYPosition()), static_cast<uint8_t>(YPosition::Fire_07) - static_cast<uint8_t>(oil.getYPosition()));
                     break;
                 
                 default: break;
