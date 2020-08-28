@@ -99,4 +99,11 @@ struct Oil {
 
         }
 
+        void reset() {
+
+            this->x = 0;
+            this->yPosition = YPosition::None;
+
+        }
+
 };

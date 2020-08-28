@@ -140,7 +140,7 @@ void renderCatcher(int8_t xOffset, uint8_t yOffset) {
 
 
 // ----------------------------------------------------------------------------
-//  Render catcher ..
+//  Render catcher map ..
 //
 void renderCatcherMap(int8_t xOffset) {
 
@@ -158,18 +158,18 @@ void renderBystanders(int8_t xOffset, uint8_t yOffset) {
     switch (throwOil) {
 
         case ThrowOil::LH_Miss_Bottom_Start ... ThrowOil::LH_Miss_Bottom_End:
-            Sprites::drawErase(-1 + xOffset, 76 - yOffset, Images::Bystanders, 1);
-            Sprites::drawErase(105 + xOffset, 76 - yOffset, Images::Bystanders, 2);
+            Sprites::drawExternalMask(-1 + xOffset, 76 - yOffset, Images::Bystanders, Images::Bystanders_Mask, 1, 1);
+            Sprites::drawExternalMask(105 + xOffset, 76 - yOffset, Images::Bystanders, Images::Bystanders_Mask, 2, 2);
             break;
 
         case ThrowOil::RH_Miss_Bottom_Start ... ThrowOil::RH_Miss_Bottom_End:
-            Sprites::drawErase(-1 + xOffset, 76 - yOffset, Images::Bystanders, 0);
-            Sprites::drawErase(105 + xOffset, 76 - yOffset, Images::Bystanders, 3);
+            Sprites::drawExternalMask(-1 + xOffset, 76 - yOffset, Images::Bystanders, Images::Bystanders_Mask, 0, 0);
+            Sprites::drawExternalMask(105 + xOffset, 76 - yOffset, Images::Bystanders, Images::Bystanders_Mask, 3, 3);
             break;
 
         default: 
-            Sprites::drawErase(-1 + xOffset, 76 - yOffset, Images::Bystanders, 0);
-            Sprites::drawErase(105 + xOffset, 76 - yOffset, Images::Bystanders, 2);
+            Sprites::drawExternalMask(-1 + xOffset, 76 - yOffset, Images::Bystanders, Images::Bystanders_Mask, 0, 0);
+            Sprites::drawExternalMask(105 + xOffset, 76 - yOffset, Images::Bystanders, Images::Bystanders_Mask, 2, 2);
             break;
     
     }
@@ -191,7 +191,9 @@ void renderOils(GameScene &gameScene, uint8_t yOffset) {
 
 }
 
-
+// ----------------------------------------------------------------------------
+//  Render oil droplets indoors ..
+//
 void renderOil(GameScene gameScene, Oil &oil, int8_t xOffset, uint8_t yOffset) {
 
     if (oil.getYPosition() != YPosition::None) {
@@ -256,7 +258,7 @@ void renderOil(GameScene gameScene, Oil &oil, int8_t xOffset, uint8_t yOffset) {
 }
 
 // ----------------------------------------------------------------------------
-//  Render oil droplets ..
+//  Render scoreboards ..
 //
 void renderScoreboard(GameScene gameScene) {
 
@@ -295,9 +297,15 @@ void renderScoreboard(GameScene gameScene) {
 
             }
 
-            for (uint8_t i = 0, x = 126; i < numberOfLives_Outdoors; i++, x = x - 2) {
+            if (numberOfLives_Outdoors < 3) {
 
-                arduboy.drawFastVLine(x, 1, 5, BLACK);
+                for (uint8_t i = 0, x = 123; i < 3 - numberOfLives_Outdoors; i++, x = x - 5) {
+
+                    Sprites::drawExternalMask(x, 1, Images::outsideMiss, Images::outsideMiss_Mask, 0, 0);
+
+                }
+
+                //Sprites::drawErase(108, 9, Images::Miss, 0);
 
             }
 

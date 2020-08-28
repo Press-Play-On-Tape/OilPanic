@@ -22,6 +22,8 @@ void playGame_Init() {
     gameOverCounter = 0;
     numberOfLives_Indoors = 3;
     numberOfLives_Outdoors = 3;
+    outdoorsYOffset = 0;
+    throwOil = ThrowOil::None;
 
 }
 

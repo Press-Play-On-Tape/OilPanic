@@ -2,7 +2,7 @@
 
 #pragma once
 
-#define SOUNDS
+#define _SOUNDS
 
 enum class GameState : uint8_t {
     Splash_Init,
@@ -92,7 +92,6 @@ enum class ThrowOil : uint8_t {
     RH_Miss_Up_NearlyEnd,
     RH_Miss_Up_End,
     None    
-
 };
 
 enum class GameScene : uint8_t {
@@ -268,7 +267,7 @@ namespace Constants {
     constexpr uint8_t led_Red_Delay             = 40;
     constexpr uint8_t led_Green_Delay           = 5;
 
-const uint8_t PROGMEM ledGreenDelays[] = { led_Green_Delay + 1, (led_Green_Delay * 3) + 1, (led_Green_Delay * 5) + 1 };
+    const uint8_t PROGMEM ledGreenDelays[] = { led_Green_Delay + 1, (led_Green_Delay * 3) + 1, (led_Green_Delay * 5) + 1 };
 
 }
 

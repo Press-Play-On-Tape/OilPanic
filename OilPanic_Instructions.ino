@@ -356,6 +356,8 @@ void instructions(void) {
 //
 void instructions_Scene1() {
 
+    gameScene = GameScene::Indoors;
+
     if (arduboy.isFrameCount(6)) {
 
         counter++;
@@ -417,6 +419,7 @@ void instructions_Scene1() {
 void instructions_Scene2() {
 
     uint8_t frameCount = counter > 32 ? 3 : 6;
+    gameScene = GameScene::Outdoors;
 
     if (arduboy.isFrameCount(frameCount)) {
 
@@ -485,10 +488,13 @@ void instructions_Scene2() {
 //
 void instructions_Scene3() {
 
+    gameScene = GameScene::Indoors;
+
     if (arduboy.isFrameCount(6)) {
         counter++;
         if (counter == SCENE3_ELEMENT_COUNT) {
             counter = 0;
+            outdoorsYOffset = 0;
             gameState = GameState::Instructions_Scene4;
         }
 
@@ -547,6 +553,7 @@ void instructions_Scene4() {
     // Create an oil drop ?
 
     outdoorsYOffset++;
+
     if (outdoorsYOffset == 80) {
         oil.setX(random(0, 3));
         oil.setYPosition(YPosition::StartDrip_00);
@@ -638,6 +645,7 @@ void instructions_Scene5() {
 
     if (arduboy.justPressed(RIGHT_BUTTON)) {
         counter = 0;
+        outdoorsYOffset = 0;
         gameState = GameState::Instructions_Scene4;
     }
 

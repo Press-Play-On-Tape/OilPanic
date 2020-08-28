@@ -71,4 +71,13 @@ namespace Images {
     0xff, 0xe0, 0xf1, 0xfb, 
     };
 
+    const uint8_t PROGMEM outsideMiss[] = {
+    4, 6,
+    0x00, 0x04, 0x00, 0x00, 
+    };
+
+    const uint8_t PROGMEM outsideMiss_Mask[] = {
+    0x1c, 0x3f, 0x3f, 0x1c, 
+    };
+
 }

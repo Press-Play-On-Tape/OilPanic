@@ -58,6 +58,12 @@ struct Oils {
 
             this->launchDelay = LAUNCH_DELAY_MAX / 2;
 
+            for (uint8_t x = 0; x < Constants::number_Of_Oils; x++) {
+
+                oils[x].reset();
+
+            }
+
         }
 
 };
