@@ -401,13 +401,7 @@ void instructions_Scene1() {
 
     }
 
-    Sprites::drawOverwrite(62, 58, Images::LeftArrow, 0);
     Sprites::drawOverwrite(123, 58, Images::RightArrow, 0);
-
-    if (arduboy.justPressed(LEFT_BUTTON)) {
-        counter = 0;
-        gameState = GameState::Title_Init;
-    }
 
     if (arduboy.justPressed(RIGHT_BUTTON)) {
         counter = 0;

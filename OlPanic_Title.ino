@@ -29,7 +29,7 @@ void title() {
             break;
     }
 
-    if (arduboy.justPressed(A_BUTTON) || arduboy.justPressed(RIGHT_BUTTON)) { 
+    if (arduboy.justPressed(A_BUTTON)) { 
 
         gameState = GameState::Instructions_Init;
 
