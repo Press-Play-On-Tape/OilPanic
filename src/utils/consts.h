@@ -2,10 +2,26 @@
 
 #pragma once
 
-#define _SOUNDS
+#define SOUNDS
+
+enum class GameState : uint8_t {
+    Splash_Init,
+    Splash,
+    Title_Init,
+    Title,
+    Instructions_Init,
+    Instructions_Scene1,
+    Instructions_Scene2,
+    Instructions_Scene3,
+    Instructions_Scene4,
+    Instructions_Scene5,
+    PlayGame_Init,
+    PlayGame,
+    HighScore_Init,
+    HighScore
+};
 
 enum class ThrowOil : uint8_t {
-
     LH_Top,
     LH_Middle,
     LH_Bottom,
@@ -79,43 +95,20 @@ enum class ThrowOil : uint8_t {
 
 };
 
-enum class GameState : uint8_t {
-
-    Splash_Init,
-    Splash,
-    Title_Init,
-    Title,
-    PlayGame_Init,
-    PlayGame
-
-};
-
 enum class GameScene : uint8_t {
-
     Indoors,
     Outdoors,
-
-};
-
-enum class GameMode : uint8_t {
-
-    Easy,
-    Hard,
-
 };
 
 enum class Direction : uint8_t {
-
     Left,
     Right,
     Up,
     Down,
     None
-
 };
 
 enum class XPosition : uint8_t {
-
     Position_Throwing_LH,
     Position_Outside_LH,
     Position_Tipping_LH,
@@ -141,11 +134,9 @@ enum class XPosition : uint8_t {
     Position_Tipping_RH,
     Position_Outside_RH,
     Position_Throwing_RH,
-
 };
 
 enum class YPosition : uint8_t {
-
     StartDrip_00,
     StartDrip_01,
     StartDrip_02,
@@ -169,7 +160,6 @@ enum class YPosition : uint8_t {
     Fire_06,
     Fire_07,
     None,
-
 };
 
 // --------------------------------------------------------------------
@@ -261,6 +251,24 @@ void extractDigits(uint8_t (&buffer)[size], uint16_t value) {
 namespace Constants {
 
     constexpr uint8_t number_Of_Oils = 6;
- 
+
+    constexpr uint8_t turn_Delay_Score_0        = 40;     
+    constexpr uint8_t turn_Delay_Score_1        = 80;
+    constexpr uint8_t turn_Delay_Score_2        = 120;
+    constexpr uint8_t turn_Delay_Min_0          = 20;
+    constexpr uint8_t turn_Delay_Min_1          = 17;
+    constexpr uint8_t turn_Delay_Min_2          = 14;
+    constexpr uint8_t turn_Delay_Min_3          = 11;
+
+    constexpr uint8_t LED_Brightness            = 8;
+
+    constexpr uint8_t name_Length               = 3;
+    constexpr uint8_t name_Length_Plus_Term     = name_Length + 1;
+    constexpr uint8_t no_Winner                 = 255;
+    constexpr uint8_t led_Red_Delay             = 40;
+    constexpr uint8_t led_Green_Delay           = 5;
+
+const uint8_t PROGMEM ledGreenDelays[] = { led_Green_Delay + 1, (led_Green_Delay * 3) + 1, (led_Green_Delay * 5) + 1 };
+
 }
 

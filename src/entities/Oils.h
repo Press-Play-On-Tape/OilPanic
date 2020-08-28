@@ -5,27 +5,40 @@
 #include "../utils/Consts.h"
 #include "Oil.h"
 
+#define LAUNCH_DELAY_MAX 120
+#define LAUNCH_DELAY_MIN 90
+
 struct Oils {
 
     private:
 
         Oil oils[Constants::number_Of_Oils];
 
+        uint8_t launchDelay = 0;
+
     public:
 
         Oil &getOil(uint8_t x)                       { return this->oils[x]; }
 
-        void launchOil(uint8_t xDisplay) {
+        void launchOil(uint16_t score) {
 
-            for (uint8_t x = 0; x < Constants::number_Of_Oils; x++) {
+            this->launchDelay--;
 
-                if (oils[x].getYPosition() == YPosition::None) {
+            if (this->launchDelay == 0) {
 
-                    oils[x].setYPosition(YPosition::StartDrip_00);
-                    oils[x].setX(xDisplay);
-                    break;
+                for (uint8_t x = 0; x < Constants::number_Of_Oils; x++) {
+
+                    if (oils[x].getYPosition() == YPosition::None) {
+
+                        oils[x].setYPosition(YPosition::StartDrip_00);
+                        oils[x].setX(random(0,3));
+                        break;
+
+                    }
 
                 }
+
+                this->launchDelay = (score < 240 ? LAUNCH_DELAY_MAX - (score / 10) : LAUNCH_DELAY_MIN);
 
             }
 
@@ -38,6 +51,12 @@ struct Oils {
                 oils[x].update();
 
             }
+
+        }
+
+        void reset() {
+
+            this->launchDelay = LAUNCH_DELAY_MAX / 2;
 
         }
 

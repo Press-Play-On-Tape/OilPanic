@@ -7,3 +7,4 @@
 #include "Oil.h"
 #include "Other.h"
 #include "Catcher.h"
+#include "HighScore.h"
