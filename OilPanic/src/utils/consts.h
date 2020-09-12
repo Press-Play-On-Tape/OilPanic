@@ -15,6 +15,7 @@ enum class GameState : uint8_t {
     Instructions_Scene3,
     Instructions_Scene4,
     Instructions_Scene5,
+    Instructions_Scene6,
     PlayGame_Init,
     PlayGame,
     HighScore_Init,

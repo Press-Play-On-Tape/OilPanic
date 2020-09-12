@@ -113,13 +113,12 @@ void loop(void) {
 
             instructions_Init();
             gameState = GameState::Instructions_Scene1;
-            arduboy.setFrameRate(50);
             #ifdef SOUNDS
             sound.noTone();
             #endif
             [[fallthrough]]
 
-        case GameState::Instructions_Scene1 ... GameState::Instructions_Scene5:
+        case GameState::Instructions_Scene1 ... GameState::Instructions_Scene6:
             instructions();
             arduboy.displayClearToWhite();
             break;

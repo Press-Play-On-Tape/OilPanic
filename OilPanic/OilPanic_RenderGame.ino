@@ -155,24 +155,30 @@ void renderCatcherMap(int8_t xOffset) {
 //
 void renderBystanders(int8_t xOffset, uint8_t yOffset) {
 
+    uint8_t bystander1 = 0;
+    uint8_t bystander2 = 0;
+    
     switch (throwOil) {
 
         case ThrowOil::LH_Miss_Bottom_Start ... ThrowOil::LH_Miss_Bottom_End:
-            Sprites::drawExternalMask(-1 + xOffset, 76 - yOffset, Images::Bystanders, Images::Bystanders_Mask, 1, 1);
-            Sprites::drawExternalMask(105 + xOffset, 76 - yOffset, Images::Bystanders, Images::Bystanders_Mask, 2, 2);
+            bystander1 = 1;
+            bystander2 = 2;
             break;
 
         case ThrowOil::RH_Miss_Bottom_Start ... ThrowOil::RH_Miss_Bottom_End:
-            Sprites::drawExternalMask(-1 + xOffset, 76 - yOffset, Images::Bystanders, Images::Bystanders_Mask, 0, 0);
-            Sprites::drawExternalMask(105 + xOffset, 76 - yOffset, Images::Bystanders, Images::Bystanders_Mask, 3, 3);
+            bystander1 = 0;
+            bystander2 = 3;
             break;
 
         default: 
-            Sprites::drawExternalMask(-1 + xOffset, 76 - yOffset, Images::Bystanders, Images::Bystanders_Mask, 0, 0);
-            Sprites::drawExternalMask(105 + xOffset, 76 - yOffset, Images::Bystanders, Images::Bystanders_Mask, 2, 2);
+            bystander1 = 0;
+            bystander2 = 2;
             break;
     
     }
+
+    Sprites::drawExternalMask(2 + xOffset, 76 - yOffset, Images::Bystanders, Images::Bystanders_Mask, bystander1, bystander1);
+    Sprites::drawExternalMask(108 + xOffset, 76 - yOffset, Images::Bystanders, Images::Bystanders_Mask, bystander2, bystander2);
 
 }
 
@@ -304,8 +310,6 @@ void renderScoreboard(GameScene gameScene) {
                     Sprites::drawExternalMask(x, 1, Images::outsideMiss, Images::outsideMiss_Mask, 0, 0);
 
                 }
-
-                //Sprites::drawErase(108, 9, Images::Miss, 0);
 
             }
 

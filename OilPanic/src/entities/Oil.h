@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Arduboy2.h>
+#include <ArduboyTones.h>
 #include "../images/Images.h"
 #include "../utils/Consts.h"
 
@@ -87,11 +88,23 @@ struct Oil {
 
         }
 
+        #ifndef SOUNDS    
         bool update() {
+        #else
+        bool update(ArduboyTones &sound) {
+        #endif
 
             if (this->yPosition < YPosition::None) {
 
                 this->yPosition++;
+                
+                if (this->yPosition < YPosition::Fire_00) {
+
+                    #ifdef SOUNDS    
+                    sound.tone(NOTE_A3, 20);
+                    #endif
+
+                }
 
             }
 

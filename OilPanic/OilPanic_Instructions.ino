@@ -1,16 +1,17 @@
 #include <Arduboy2.h>
 
 
-#define SCENE1_ELEMENT_COUNT 88
+#define SCENE1_ELEMENT_COUNT 93
 #define SCENE1_OFFSET -70
 #define SCENE2_OFFSET 70
-#define SCENE2_ELEMENT_COUNT 72
+#define SCENE2_ELEMENT_COUNT 76
 #define SCENE3_OFFSET -70
 #define SCENE3_ELEMENT_COUNT 56
 #define SCENE4_OFFSET 34
 #define SCENE4_BORDER 70
 #define SCENE4_ELEMENT_COUNT 100
-#define SCENE5_DELAY 32
+#define SCENE6_DELAY 32
+#define SCENE5_OFFSET -70
 
 const XPosition PROGMEM scene1_PlayerXPosition[SCENE1_ELEMENT_COUNT] = {         
     XPosition::Position_15_Oil, XPosition::Position_15_Oil, XPosition::Position_16, XPosition::Position_16, 
@@ -39,6 +40,7 @@ const XPosition PROGMEM scene1_PlayerXPosition[SCENE1_ELEMENT_COUNT] = {
 
     XPosition::Position_Tipping_RH, XPosition::Position_Tipping_RH, XPosition::Position_Tipping_RH, XPosition::Position_Tipping_RH, 
     XPosition::Position_19, XPosition::Position_18, XPosition::Position_17, XPosition::Position_16, 
+    XPosition::Position_15_Oil, XPosition::Position_16, XPosition::Position_17, XPosition::Position_18, 
 };
 
 const YPosition PROGMEM scene1_DripYPosition[SCENE1_ELEMENT_COUNT] = { 
@@ -66,6 +68,7 @@ const YPosition PROGMEM scene1_DripYPosition[SCENE1_ELEMENT_COUNT] = {
     YPosition::None, YPosition::None, YPosition::None, YPosition::None, 
     YPosition::None, YPosition::None, YPosition::None, YPosition::None, 
 
+    YPosition::None, YPosition::None, YPosition::None, YPosition::None, 
     YPosition::None, YPosition::None, YPosition::None, YPosition::None, 
     YPosition::None, YPosition::None, YPosition::None, YPosition::None, 
 };
@@ -97,6 +100,7 @@ const uint8_t PROGMEM scene1_OilLevel[SCENE1_ELEMENT_COUNT] = {
 
     0, 0, 0, 0, 
     0, 0, 0, 0, 
+    0, 0, 0, 0, 
 };                                          
 
 const uint8_t PROGMEM scene1_Instructions[SCENE1_ELEMENT_COUNT] = {         
@@ -126,58 +130,11 @@ const uint8_t PROGMEM scene1_Instructions[SCENE1_ELEMENT_COUNT] = {
 
     3, 3, 3, 3,
     3, 3, 3, 3,
+    3, 3, 3, 3,
 };      
 
 
-const uint8_t PROGMEM scene1_YCursor[3] =   { 21, 17, 12 };                               
-
-const XPosition PROGMEM scene2_PlayerXPosition[SCENE2_ELEMENT_COUNT] = {         
-    XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, 
-    XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, 
-    XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, 
-    XPosition::Position_Throwing_LH, XPosition::Position_Throwing_LH, XPosition::Position_Throwing_LH, XPosition::Position_Throwing_LH, 
-    XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, 
-
-    XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, 
-    XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, 
-    XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, 
-    XPosition::Position_Throwing_LH, XPosition::Position_Throwing_LH, XPosition::Position_Throwing_LH, XPosition::Position_Throwing_LH, 
-    XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, 
-
-    XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, 
-    XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, 
-    XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, 
-    XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, 
-    XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, 
-
-    XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, 
-    XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, 
-    XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, XPosition::Position_Outside_LH, 
-};
-
-const Direction PROGMEM scene2_CatcherDirection[SCENE2_ELEMENT_COUNT] = { 
-    Direction::Left, Direction::Left, Direction::Left, Direction::Left, 
-    Direction::Left, Direction::Left, Direction::Left, Direction::Left, 
-    Direction::Left, Direction::Left, Direction::Left, Direction::Left, 
-    Direction::Left, Direction::Left, Direction::Left, Direction::Left, 
-    Direction::Left, Direction::Left, Direction::Left, Direction::Left, 
-
-    Direction::Right, Direction::Right, Direction::Right, Direction::Right, 
-    Direction::Right, Direction::Right, Direction::Right, Direction::Right, 
-    Direction::Right, Direction::Right, Direction::Right, Direction::Right, 
-    Direction::Right, Direction::Right, Direction::Right, Direction::Right, 
-    Direction::Right, Direction::Right, Direction::Right, Direction::Right, 
-
-    Direction::Right, Direction::Right, Direction::Right, Direction::Right, 
-    Direction::Right, Direction::Right, Direction::Right, Direction::Right, 
-    Direction::Right, Direction::Right, Direction::Right, Direction::Right, 
-    Direction::Right, Direction::Right, Direction::Right, Direction::Right, 
-    Direction::Right, Direction::Right, Direction::Right, Direction::Right, 
-
-    Direction::Right, Direction::Right, Direction::Right, Direction::Right, 
-    Direction::Right, Direction::Right, Direction::Right, Direction::Right, 
-    Direction::Right, Direction::Right, Direction::Right, Direction::Right, 
-};
+const uint8_t PROGMEM scene1_YCursor[3] =   { 16, 17, 12 };                               
 
 const uint8_t PROGMEM scene2_CatcherXPosition[SCENE2_ELEMENT_COUNT] = { 
     13, 12, 11, 10, 
@@ -198,6 +155,7 @@ const uint8_t PROGMEM scene2_CatcherXPosition[SCENE2_ELEMENT_COUNT] = {
     20, 20, 20, 20, 
     20, 20, 20, 20, 
 
+    20, 20, 20, 20, 
     20, 20, 20, 20, 
     20, 20, 20, 20, 
     20, 20, 20, 20, 
@@ -225,6 +183,7 @@ const ThrowOil PROGMEM scene2_OilYPosition[SCENE2_ELEMENT_COUNT] = {
     ThrowOil::LH_Miss_Up_Start, ThrowOil::LH_Miss_Up_01, ThrowOil::LH_Miss_Up_02, ThrowOil::LH_Miss_Up_03,
     ThrowOil::LH_Miss_Up_04, ThrowOil::LH_Miss_Up_05, ThrowOil::LH_Miss_Up_06, ThrowOil::LH_Miss_Up_07,
     ThrowOil::LH_Miss_Up_08, ThrowOil::LH_Miss_Up_NearlyEnd, ThrowOil::LH_Miss_Up_End, ThrowOil::LH_Miss_Up_End,
+    ThrowOil::LH_Miss_Up_End, ThrowOil::LH_Miss_Up_End, ThrowOil::LH_Miss_Up_End, ThrowOil::LH_Miss_Up_End,
 };
 
 const uint8_t PROGMEM scene2_YOffset[SCENE2_ELEMENT_COUNT] = { 
@@ -249,6 +208,7 @@ const uint8_t PROGMEM scene2_YOffset[SCENE2_ELEMENT_COUNT] = {
     18, 16, 14, 12, 
     10, 8, 6, 4, 
     2, 0, 0, 0, 
+    0, 0, 0, 0, 
 };
 
 const uint8_t PROGMEM scene2_Instructions[SCENE2_ELEMENT_COUNT] =   {         
@@ -270,6 +230,7 @@ const uint8_t PROGMEM scene2_Instructions[SCENE2_ELEMENT_COUNT] =   {
     2, 2, 2, 2,
     2, 2, 2, 2,
 
+    2, 2, 2, 2,
     2, 2, 2, 2,
     2, 2, 255, 255,
 };      
@@ -297,8 +258,9 @@ const uint8_t PROGMEM scene3_Instructions[SCENE3_ELEMENT_COUNT] =   {
 
 const uint8_t PROGMEM scene3_YCursor[3] =   { 12, 12 };                               
 
+const uint8_t PROGMEM scene4_YCursor[3] =   { 16, 7 };                               
 
-const uint8_t PROGMEM scene4_YCursor[3] =   { 16, 5 };                               
+const uint8_t PROGMEM scene5_YCursor[3] =   { 16, 20 };                               
 
 
 // ----------------------------------------------------------------------------
@@ -307,8 +269,10 @@ const uint8_t PROGMEM scene4_YCursor[3] =   { 16, 5 };
 void instructions_Init(void) {
 
     outdoorsYOffset = 0;
-    player.setOilLevel(0);
     counter = 0;
+
+    player.setOilLevel(0);
+    arduboy.setFrameRate(38);
 
 }
 
@@ -338,6 +302,10 @@ void instructions(void) {
 
         case GameState::Instructions_Scene5:
             instructions_Scene5();
+            break;
+
+        case GameState::Instructions_Scene6:
+            instructions_Scene6();
             break;
 
         default: break;
@@ -380,9 +348,7 @@ void instructions_Scene1() {
 
     renderPlayer_Indoors(SCENE1_OFFSET);
     renderOil(gameScene, oil, SCENE1_OFFSET, outdoorsYOffset);
-
-    arduboy.drawVerticalDottedLine(0, HEIGHT, SCENE1_OFFSET + 128 + 1, BLACK);
-    arduboy.drawVerticalDottedLine(1, HEIGHT, SCENE1_OFFSET + 128 + 2, BLACK);
+    renderDottedLines(SCENE1_OFFSET + 128 + 1);
 
     font3x5.setCursor(SCENE1_OFFSET + 128 + 6, pgm_read_byte(&scene1_YCursor[pgm_read_byte(&scene1_Instructions[counter]) - 1]));
     font3x5.setTextColor(BLACK);
@@ -390,7 +356,7 @@ void instructions_Scene1() {
     switch (pgm_read_byte(&scene1_Instructions[counter])) {
 
         case 1:
-            font3x5.print(F("Catch~the~drops\nbefore~they~hit\nthe~floor."));
+            font3x5.print(F("Catch~the~drops\nbefore~they~hit\nthe~floor~to~gain\npoints."));
             break;
 
         case 2:
@@ -403,8 +369,8 @@ void instructions_Scene1() {
 
     }
 
-    Sprites::drawOverwrite(123, 58, Images::RightArrow, 0);
-
+    renderArrows(0, 123);
+    
     if (arduboy.justPressed(RIGHT_BUTTON)) {
         counter = 0;
         gameState = GameState::Instructions_Scene2;
@@ -432,16 +398,23 @@ void instructions_Scene2() {
 
     }
 
+    renderOutside(SCENE2_OFFSET, outdoorsYOffset);
 
-    for (uint8_t x = 0; x < 13; x++) {
+    switch (counter) {
 
-        Sprites::drawOverwrite(SCENE2_OFFSET, 0 - outdoorsYOffset + (x * 8), Images::Outdoors, x);
+        case 12 ... 15:
+        case 30 ... 33:
+            player.setXPosition(XPosition::Position_Throwing_LH);
+            break;
+
+        default:
+            player.setXPosition(XPosition::Position_Outside_LH);
+            break;
 
     }
 
-    player.setXPosition(static_cast<XPosition>(pgm_read_byte(&scene2_PlayerXPosition[counter])));
     catcher.setX(pgm_read_byte(&scene2_CatcherXPosition[counter]));
-    catcher.setDirection(static_cast<Direction>(pgm_read_byte(&scene2_CatcherDirection[counter])));
+    catcher.setDirection(counter < 20 ? Direction::Left : Direction::Right);
     throwOil = static_cast<ThrowOil>(pgm_read_byte(&scene2_OilYPosition[counter]));
     outdoorsYOffset = pgm_read_byte(&scene2_YOffset[counter]);
 
@@ -449,9 +422,8 @@ void instructions_Scene2() {
     renderCatcher(SCENE2_OFFSET, outdoorsYOffset);
     renderThrowingOil(SCENE2_OFFSET, outdoorsYOffset);
     renderBystanders(SCENE2_OFFSET, outdoorsYOffset);
+    renderDottedLines(SCENE2_OFFSET - 3);
 
-    arduboy.drawVerticalDottedLine(0, HEIGHT, SCENE2_OFFSET - 3, BLACK);
-    arduboy.drawVerticalDottedLine(1, HEIGHT, SCENE2_OFFSET - 2, BLACK);
 
     font3x5.setCursor(2, pgm_read_byte(&scene2_YCursor[pgm_read_byte(&scene2_Instructions[counter]) - 1]));
 
@@ -467,8 +439,7 @@ void instructions_Scene2() {
 
     }
 
-    Sprites::drawOverwrite(1, 58, Images::LeftArrow, 0);
-    Sprites::drawOverwrite(62, 58, Images::RightArrow, 0);
+    renderArrows(1, 62);
 
     if (arduboy.justPressed(LEFT_BUTTON)) {
         counter = 0;
@@ -476,7 +447,7 @@ void instructions_Scene2() {
     }
 
     if (arduboy.justPressed(RIGHT_BUTTON)) {
-        counter =0;
+        counter = 0;
         gameState = GameState::Instructions_Scene3;
     }
 
@@ -503,8 +474,7 @@ void instructions_Scene3() {
     Sprites::drawOverwrite(SCENE3_OFFSET, 0, Images::Indoors, 0);
     arduboy.fillRect(SCENE3_OFFSET +108, 24, 17, 6, WHITE);
 
-    arduboy.drawVerticalDottedLine(0, HEIGHT, SCENE1_OFFSET + 128 + 1, BLACK);
-    arduboy.drawVerticalDottedLine(1, HEIGHT, SCENE1_OFFSET + 128 + 2, BLACK);
+    renderDottedLines(SCENE1_OFFSET + 128 + 1);
     renderCatcherMap(SCENE3_OFFSET);
 
     if (arduboy.isFrameCount(3)) {
@@ -526,8 +496,7 @@ void instructions_Scene3() {
 
     }
 
-    Sprites::drawOverwrite(62, 58, Images::LeftArrow, 0);
-    Sprites::drawOverwrite(123, 58, Images::RightArrow, 0);
+    renderArrows(62, 123);
 
     if (arduboy.justPressed(LEFT_BUTTON)) {
         counter = 0;
@@ -565,30 +534,28 @@ void instructions_Scene4() {
         counter++;
 
         if (counter == SCENE4_ELEMENT_COUNT) {
-            counter = SCENE5_DELAY * 4;
+            counter = 0;
             gameState = GameState::Instructions_Scene5;
         }
 
     }
 
-
-    for (uint8_t x = 0; x < 8; x++) {
-
-        Sprites::drawOverwrite(SCENE4_OFFSET, (x * 8), Images::Outdoors, x);
-
-    }
+    renderOutside(SCENE4_OFFSET, 0);
 
     if (!gameOver && arduboy.isFrameCount(4)) {
         catcher.update(100);
+        #ifndef SOUNDS
         oil.update();
+        #else
+        oil.update(sound);
+        #endif
     }
 
     renderOil(GameScene::Outdoors, oil, SCENE4_OFFSET, 0);
     renderCatcher(SCENE4_OFFSET, 0);
-
     arduboy.fillRect(0, 0, SCENE4_BORDER, HEIGHT, WHITE);
-    arduboy.drawVerticalDottedLine(0, HEIGHT, SCENE4_BORDER - 3, BLACK);
-    arduboy.drawVerticalDottedLine(1, HEIGHT, SCENE4_BORDER - 2, BLACK);
+
+    renderDottedLines(SCENE4_BORDER - 3);
     font3x5.setCursor(2, pgm_read_byte(&scene4_YCursor[counter <= 40 ? 0 : 1]));
 
     switch (counter) {
@@ -603,8 +570,7 @@ void instructions_Scene4() {
 
     }
 
-    Sprites::drawOverwrite(1, 58, Images::LeftArrow, 0);
-    Sprites::drawOverwrite(62, 58, Images::RightArrow, 0);
+    renderArrows(1, 62);
 
     if (arduboy.justPressed(LEFT_BUTTON)) {
         counter = 0;
@@ -612,7 +578,7 @@ void instructions_Scene4() {
     }
 
     if (arduboy.justPressed(RIGHT_BUTTON)) {
-        counter = SCENE5_DELAY * 4;
+        counter = 0;
         gameState = GameState::Instructions_Scene5;
     }
 
@@ -624,17 +590,72 @@ void instructions_Scene4() {
 //
 void instructions_Scene5() {
 
-    counter--;
+    if (arduboy.isFrameCount(6)) {
 
-    Sprites::drawOverwrite(3, 26, Images::Ready, 0);
+        counter++;
 
-    if (counter > 3 * SCENE5_DELAY)  Sprites::drawExternalMask(100, 10, Images::Barrel, Images::Barrel_Mask, 0, 0);
-    if (counter > 2 * SCENE5_DELAY)  Sprites::drawExternalMask(91, 33, Images::Barrel, Images::Barrel_Mask, 0, 0);
-    if (counter > SCENE5_DELAY)  Sprites::drawExternalMask(109, 33, Images::Barrel, Images::Barrel_Mask, 0, 0);
+        if (counter == 87) {
+            counter = SCENE6_DELAY * 4;
+            gameState = GameState::Instructions_Scene6;
+        }
 
-    if  (counter == 0) gameState = GameState::PlayGame_Init;
+    }
 
-    Sprites::drawOverwrite(1, 58, Images::LeftArrow, 0);
+
+    renderDottedLines(SCENE5_OFFSET + 128 + 1);
+
+    font3x5.setCursor(SCENE5_OFFSET + 128 + 6, pgm_read_byte(&scene5_YCursor[counter <= 40 ? 0 : 1]));
+
+    switch (counter) {
+
+        case 0 ... 1:
+        case 41 ... 42:
+            Sprites::drawOverwrite(SCENE5_OFFSET, 0, Images::Indoors, 0);
+            break;
+
+        case 2 ... 40:
+
+            Sprites::drawOverwrite(SCENE5_OFFSET, 0, Images::Indoors, 0);
+            font3x5.print(F("The~game~is~over\nwhen~you~miss\nthree~oil~drips\ninside~or~.."));
+
+            if ((counter / 8) % 2 == 0) {
+
+                for (uint8_t i = 0, x = 120 + SCENE5_OFFSET; i < 3; i++, x = x - 8) {
+
+                    Sprites::drawErase(x, 16, Images::Life, 0);
+
+                }
+
+                Sprites::drawErase(108 + SCENE5_OFFSET, 24, Images::Miss, 0);
+
+            }
+
+            break;
+
+        case 45 ... 85:
+            renderOutside(SCENE5_OFFSET, 0);
+            font3x5.print(F("..~tip~the~oil~on\nthree~customers\ndown~below."));
+
+            if ((counter / 8) % 2 == 0) {
+
+                for (uint8_t i = 0, x = 123 + SCENE5_OFFSET; i < 3; i++, x = x - 5) {
+
+                    Sprites::drawExternalMask(x, 1, Images::outsideMiss, Images::outsideMiss_Mask, 0, 0);
+
+                }
+
+            }
+
+            break;
+
+        default:
+            renderOutside(SCENE5_OFFSET, 0);
+            break;
+
+    }
+
+
+    renderArrows(62, 123);
 
     if (arduboy.justPressed(LEFT_BUTTON)) {
         counter = 0;
@@ -644,9 +665,77 @@ void instructions_Scene5() {
     }
 
     if (arduboy.justPressed(RIGHT_BUTTON)) {
+        counter = SCENE6_DELAY * 4;
+        outdoorsYOffset = 0;
+        gameState = GameState::Instructions_Scene6;
+    }
+
+}
+
+
+// ----------------------------------------------------------------------------
+//  Render instructions - Scene 6 ..
+//
+void instructions_Scene6() {
+
+    counter--;
+
+    Sprites::drawOverwrite(3, 26, Images::Ready, 0);
+
+    if (counter > 3 * SCENE6_DELAY)  Sprites::drawExternalMask(100, 10, Images::Barrel, Images::Barrel_Mask, 0, 0);
+    if (counter > 2 * SCENE6_DELAY)  Sprites::drawExternalMask(91, 33, Images::Barrel, Images::Barrel_Mask, 0, 0);
+    if (counter > SCENE6_DELAY)  Sprites::drawExternalMask(109, 33, Images::Barrel, Images::Barrel_Mask, 0, 0);
+
+    if  (counter == 0) gameState = GameState::PlayGame_Init;
+
+    renderArrows(1, 0);
+
+    if (arduboy.justPressed(LEFT_BUTTON)) {
+        counter = 0;
+        gameState = GameState::Instructions_Scene5;
+        outdoorsYOffset = 0;
+        catcher.reset();
+    }
+
+    if (arduboy.justPressed(RIGHT_BUTTON)) {
         counter = 0;
         outdoorsYOffset = 0;
         gameState = GameState::Instructions_Scene4;
+    }
+
+}
+
+// ----------------------------------------------------------------------------
+//  Render dotted lines ..
+//
+void renderDottedLines(uint8_t x) {
+
+    arduboy.drawVerticalDottedLine(0, HEIGHT, x, BLACK);
+    arduboy.drawVerticalDottedLine(1, HEIGHT, x + 1, BLACK);
+
+}
+
+
+// ----------------------------------------------------------------------------
+//  Render left and right arrows ..
+//
+void renderArrows(uint8_t leftArrow, uint8_t rightArrow) {
+
+    if (leftArrow > 0) Sprites::drawOverwrite(leftArrow, 58, Images::LeftArrow, 0);
+    if (rightArrow > 0) Sprites::drawOverwrite(rightArrow, 58, Images::RightArrow, 0);
+
+}
+
+
+// ----------------------------------------------------------------------------
+//  Render outside scene ..
+//
+void renderOutside(int8_t xOffset, uint8_t outdoorsYOffset) {
+
+    for (uint8_t x = 0; x < 13; x++) {
+
+        Sprites::drawOverwrite(xOffset, 0 - outdoorsYOffset + (x * 8), Images::Outdoors, x);
+
     }
 
 }

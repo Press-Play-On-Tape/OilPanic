@@ -143,7 +143,11 @@ void playGame(void) {
 
                     if (arduboy.isFrameCount(frameCount)) {
 
+                        #ifndef SOUNDS
                         if (oil.update()) {
+                        #else
+                        if (oil.update(sound)) {
+                        #endif
 
                             if (numberOfLives_Indoors > 0) {
                                 
@@ -174,7 +178,11 @@ void playGame(void) {
 
                 if (arduboy.isFrameCount(2)) {
 
+                    #ifndef SOUNDS
                     oil.update();
+                    #else
+                    oil.update(sound);
+                    #endif
 
                 }
                 break;
@@ -345,7 +353,6 @@ void playGame(void) {
 
             Sprites::drawOverwrite(0, 0, Images::Indoors, 0);
             renderPlayer_Indoors(0);
-            // renderOils(gameScene, outdoorsYOffset);
             renderCatcherMap(0);
             break;
             
@@ -395,6 +402,7 @@ void catchOil(XPosition xPosition) {
                     if (player.incOilLevel()) {
 
                         oil.setYPosition(YPosition::None);
+                        score++;
                         #ifdef SOUNDS
                         sound.tones(Sounds::catchOil);
                         #endif
@@ -413,12 +421,14 @@ void catchOil(XPosition xPosition) {
 }
 
 
-
 bool updateThrowOil(ThrowOil &throwOil) {
 
     switch (throwOil) {
 
         case ThrowOil::LH_Top:
+        case ThrowOil::RH_Top:
+        case ThrowOil::LH_Miss_Bottom_Start ... ThrowOil::LH_Miss_Bottom_End:
+        case ThrowOil::RH_Miss_Bottom_Start ... ThrowOil::RH_Miss_Bottom_End:
             throwOil++;
             break;
 
@@ -437,6 +447,7 @@ bool updateThrowOil(ThrowOil &throwOil) {
             break;
             
         case ThrowOil::LH_Bottom:
+        case ThrowOil::RH_Bottom:
             throwOil = ThrowOil::None;
             break;
 
@@ -463,19 +474,11 @@ bool updateThrowOil(ThrowOil &throwOil) {
             }
             break;
 
-        case ThrowOil::LH_Miss_Bottom_Start ... ThrowOil::LH_Miss_Bottom_End:
-            throwOil++;
-            break;
-
         case ThrowOil::LH_Miss_Up_Start ... ThrowOil::LH_Miss_Up_NearlyEnd:
             if (!gameOver) {
                 throwOil++;
                 outdoorsYOffset = outdoorsYOffset - 4;
             }
-            break;
-
-        case ThrowOil::RH_Top:
-            throwOil++;
             break;
 
         case ThrowOil::RH_Middle:
@@ -490,10 +493,6 @@ bool updateThrowOil(ThrowOil &throwOil) {
                 #endif
 
             }
-            break;
-            
-        case ThrowOil::RH_Bottom:
-            throwOil = ThrowOil::None;
             break;
 
         case ThrowOil::RH_Miss_Down_Start ... ThrowOil::RH_Miss_Down_End:
@@ -517,10 +516,6 @@ bool updateThrowOil(ThrowOil &throwOil) {
                 }
 
             }
-            break;
-
-        case ThrowOil::RH_Miss_Bottom_Start ... ThrowOil::RH_Miss_Bottom_End:
-            throwOil++;
             break;
 
         case ThrowOil::RH_Miss_Up_Start ... ThrowOil::RH_Miss_Up_NearlyEnd:

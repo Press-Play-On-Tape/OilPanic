@@ -44,7 +44,8 @@ struct Oils {
 
         }
 
-        void update() {
+        #ifndef SOUNDS    
+        bool update() {
 
             for (uint8_t x = 0; x < Constants::number_Of_Oils; x++) {
                 
@@ -53,6 +54,17 @@ struct Oils {
             }
 
         }
+        #else
+        bool update(ArduboyTones &sound) {
+
+            for (uint8_t x = 0; x < Constants::number_Of_Oils; x++) {
+                
+                oils[x].update(sound);
+
+            }
+
+        }
+        #endif
 
         void reset() {
 
