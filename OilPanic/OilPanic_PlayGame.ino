@@ -217,6 +217,7 @@ void playGame(void) {
 
                 if (justPressedButton & LEFT_BUTTON)               { player.decXPosition(); }
                 if (justPressedButton & RIGHT_BUTTON)              { player.incXPosition(); }
+                if (justPressedButton & B_BUTTON)                  { player.incXPosition(); }
 
             }
             else if (gameOver && gameOverCounter == 0) {

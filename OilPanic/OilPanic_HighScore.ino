@@ -36,6 +36,8 @@ void highScore_Init(void) {
 // ----------------------------------------------------------------------------
 //  High Score ..
 //
+#define KEY_REPEAT 12
+
 void highScore(void) {
 
 
@@ -46,10 +48,10 @@ void highScore(void) {
     // Is the new score a high score ?
 
     if (winnerIdx < Constants::no_Winner) {
-
-        if (arduboy.everyXFrames(4)) {
                 
-            char * player = entries[winnerIdx].name;
+        char * player = entries[winnerIdx].name;
+
+        if (justPressed == 0 && arduboy.frameCount % KEY_REPEAT == frameRate) {
 
             if (pressed & UP_BUTTON) {
 
@@ -90,9 +92,40 @@ void highScore(void) {
             }
 
         }   
+        else {
+
+            if (justPressed & UP_BUTTON) {
+
+                player[charIdx]++;
+                if (player[charIdx] > 90)  player[charIdx] = 65;
+                if (player[charIdx] == 64) player[charIdx] = 65;
+                frameRate = arduboy.frameCount % KEY_REPEAT;
+
+            }
+
+            if (justPressed & DOWN_BUTTON) {
+
+                player[charIdx]--;
+                if (player[charIdx] < 65)  player[charIdx] = 90;
+                frameRate = arduboy.frameCount % KEY_REPEAT;
+
+            }
+
+            if (justPressed & LEFT_BUTTON && charIdx > 0) {
+                charIdx--;
+                frameRate = arduboy.frameCount % KEY_REPEAT;
+            }
+
+            if (justPressed & RIGHT_BUTTON && charIdx < 2) {
+                charIdx++;
+                frameRate = arduboy.frameCount % KEY_REPEAT;
+            }
+            
+        }
 
     }
     else {
+
 
 
         // Handle other input ..
