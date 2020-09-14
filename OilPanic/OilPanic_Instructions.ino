@@ -700,7 +700,7 @@ void instructions_Scene6() {
     if (arduboy.justPressed(RIGHT_BUTTON)) {
         counter = 0;
         outdoorsYOffset = 0;
-        gameState = GameState::Instructions_Scene4;
+        gameState = GameState::PlayGame_Init;
     }
 
 }

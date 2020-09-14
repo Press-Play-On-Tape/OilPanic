@@ -187,8 +187,13 @@ void highScore(void) {
 
     const bool flash = arduboy.getFrameCountHalf(FLASH_FRAME_COUNT);
 
-    Sprites::drawOverwrite(0, 0, Images::HighScores, 0);
+    Sprites::drawOverwrite(0, 0, Images::HighScore_LHS, 0);
+    Sprites::drawOverwrite(54, 42, Images::HighScore_BOT, 0);
+    Sprites::drawOverwrite(54, 8, Images::HighScore_TXT, 0);
 
+    arduboy.drawLine(54, 1, 128, 1, BLACK);
+    arduboy.drawLine(78, 62, 128, 62, BLACK);
+    
 
     // Render scores ..
 
