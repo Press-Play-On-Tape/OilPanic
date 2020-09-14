@@ -295,7 +295,7 @@ void playGame(void) {
 
                 }
 
-                if (justPressedButton & RIGHT_BUTTON) { 
+                if ((justPressedButton & RIGHT_BUTTON) || (justPressedButton & B_BUTTON)) { 
 
                     switch (player.getXPosition()) {
                         
