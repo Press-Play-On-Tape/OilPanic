@@ -2,7 +2,7 @@
 
 #pragma once
 
-#define _SOUNDS
+#define SOUNDS
 
 enum class GameState : uint8_t {
     Splash_Init,
