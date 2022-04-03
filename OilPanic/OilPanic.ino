@@ -62,7 +62,7 @@ void setup(void) {
 	arduboy.systemButtons();
 	arduboy.initRandomSeed();
 	arduboy.setFrameRate(50);
-    arduboy.setRGBled(0, 0, 0);
+  arduboy.setRGBled(0, 0, 0);
 
     #ifdef SOUNDS
     arduboy.audio.begin();
@@ -161,4 +161,3 @@ void loop(void) {
 
 
 }
-
