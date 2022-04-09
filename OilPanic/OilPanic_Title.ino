@@ -12,15 +12,15 @@ void title() {
     switch (counter) {
 
         case 60 ... 63:
-            Sprites::drawOverwrite(80, 18, Images::Title_Eyes, 0);
+            Sprites::drawOverwrite(81, 18, Images::Title_Eyes, 0);
             break;
 
         case 64 ... 67:
-            Sprites::drawOverwrite(80, 18, Images::Title_Eyes, 1);
+            Sprites::drawOverwrite(81, 18, Images::Title_Eyes, 1);
             break;
 
         case 68 ... 71:
-            Sprites::drawOverwrite(80, 18, Images::Title_Eyes, 2);
+            Sprites::drawOverwrite(81, 18, Images::Title_Eyes, 2);
             break;
 
 
